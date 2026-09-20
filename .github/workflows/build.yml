@@ -5,6 +5,9 @@ on:
     branches: [develop, main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   windows-build:
     runs-on: windows-latest
@@ -46,3 +49,33 @@ jobs:
             asterion-star-citizen-cockpit-*.icuewidget
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish GitHub prerelease
+        if: github.ref == 'refs/heads/main'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $manifest = Get-Content widget/manifest.json | ConvertFrom-Json
+          $version = $manifest.version
+          $tag = "v$version"
+          @"
+          ## Asterion Edge $tag
+
+          Cette préversion adopte la nouvelle interface MFD-first :
+          - gros boutons tactiles ;
+          - panneaux Power / Flight / Ship Systems / Target ;
+          - commandes de boucliers directionnels ;
+          - éjection et autodestruction protégées par maintien ;
+          - mode À pied réorganisé ;
+          - personnalisation avancée conservée.
+
+          Voir CHANGELOG.md pour le détail complet.
+          "@ | Set-Content release-notes.md -Encoding UTF8
+
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release delete $tag --yes --cleanup-tag
+          }
+
+          gh release create $tag release/AsterionEdge-Setup-*.exe asterion-star-citizen-cockpit-*.icuewidget --target "${{ github.sha }}" --title "Asterion Edge $tag" --notes-file release-notes.md --prerelease
