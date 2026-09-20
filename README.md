@@ -1,4 +1,6 @@
-# Asterion Edge 0.3.0-dev.3
+# Asterion Edge 0.3.0-design.1
+
+Refonte du cockpit basée sur v0.3.0-dev.3 et les références visuelles fournies. Voir [les changements et la validation](docs/design-reference.md).
 
 Asterion Edge est un cockpit tactile local pour **CORSAIR XENEON EDGE** et **Star Citizen**.
 

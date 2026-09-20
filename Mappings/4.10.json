@@ -631,6 +631,426 @@
       "dangerous": false,
       "pressMs": 90,
       "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "startup",
+      "label": "Démarrage du vaisseau",
+      "page": "Power",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "weaponsUp",
+      "label": "Armes : puissance +",
+      "page": "Power",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "weaponsDown",
+      "label": "Armes : puissance −",
+      "page": "Power",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "enginesUp",
+      "label": "Moteurs : puissance +",
+      "page": "Power",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "enginesDown",
+      "label": "Moteurs : puissance −",
+      "page": "Power",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "shieldsUp",
+      "label": "Boucliers : puissance +",
+      "page": "Power",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "shieldsDown",
+      "label": "Boucliers : puissance −",
+      "page": "Power",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "coolersUp",
+      "label": "Refroidissement +",
+      "page": "Power",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "coolersDown",
+      "label": "Refroidissement −",
+      "page": "Power",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "proximity",
+      "label": "Assistance de proximité",
+      "page": "Flight",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "mfdprev",
+      "label": "MFD précédent",
+      "page": "Systems",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "lightamp",
+      "label": "Vision nocturne",
+      "page": "Systems",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "freecam",
+      "label": "Caméra libre",
+      "page": "Systems",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "cycleall",
+      "label": "Cycle toutes les cibles",
+      "page": "Targeting",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "subreset",
+      "label": "Réinitialiser sous-cible",
+      "page": "Targeting",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "pin2",
+      "label": "Épingler cible 2",
+      "page": "Targeting",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "helmetstow",
+      "label": "Ranger le casque",
+      "page": "FPS",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "melee",
+      "label": "Mêlée",
+      "page": "FPS",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "reload2",
+      "label": "Rechargement alternatif",
+      "page": "FPS",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "lower",
+      "label": "Baisser l’arme",
+      "page": "FPS",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "zeroUp",
+      "label": "Distance de visée +",
+      "page": "FPS",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "zeroDown",
+      "label": "Distance de visée −",
+      "page": "FPS",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "greet",
+      "label": "Bonjour",
+      "page": "Emotes",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "agree",
+      "label": "Accord",
+      "page": "Emotes",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "clap",
+      "label": "Applaudir",
+      "page": "Emotes",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "cheer",
+      "label": "Encourager",
+      "page": "Emotes",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "laugh",
+      "label": "Rire",
+      "page": "Emotes",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "point",
+      "label": "Pointer",
+      "page": "Emotes",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "come",
+      "label": "Venir",
+      "page": "Emotes",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "miningmode",
+      "label": "Mode minage",
+      "page": "Mining",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "mininglaser",
+      "label": "Laser de minage",
+      "page": "Mining",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "miningpowerUp",
+      "label": "Puissance minage +",
+      "page": "Mining",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "miningpowerDown",
+      "label": "Puissance minage −",
+      "page": "Mining",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "miningmodule1",
+      "label": "Module minage 1",
+      "page": "Mining",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "miningmodule2",
+      "label": "Module minage 2",
+      "page": "Mining",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "miningmodule3",
+      "label": "Module minage 3",
+      "page": "Mining",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "salvagemode",
+      "label": "Mode récupération",
+      "page": "Salvage",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "salvagelaser",
+      "label": "Faisceau récupération",
+      "page": "Salvage",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "salvagecycle",
+      "label": "Cycle récupération",
+      "page": "Salvage",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "salvagefocus",
+      "label": "Focus récupération",
+      "page": "Salvage",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "salvagesizeUp",
+      "label": "Zone récupération +",
+      "page": "Salvage",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "salvagesizeDown",
+      "label": "Zone récupération −",
+      "page": "Salvage",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     }
   ]
 }

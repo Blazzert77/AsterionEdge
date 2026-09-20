@@ -17,13 +17,13 @@ public sealed class Config
     // Kept for backwards compatibility with 0.1.x configs. v0.2 auto-links on loopback and does not require manual pairing.
     public string Token { get; set; } = Convert.ToHexString(RandomNumberGenerator.GetBytes(24));
     public bool RequirePairing { get; set; } = false;
-    public string Accent { get; set; } = "#20E0D0";
+    public string Accent { get; set; } = "#00C8FA";
     public string Accent2 { get; set; } = "#2B8CFF";
     public string Background { get; set; } = "#061019";
-    public string Panel { get; set; } = "#0D1B25";
+    public string Panel { get; set; } = "#063044";
     public int PanelOpacity { get; set; } = 92;
     public int FontScale { get; set; } = 100;
-    public int Radius { get; set; } = 8;
+    public int Radius { get; set; } = 2;
     public int Glow { get; set; } = 32;
     public int QuickColumns { get; set; } = 10;
     public string Density { get; set; } = "comfortable";
@@ -52,17 +52,17 @@ public sealed class Config
         c.Port=Math.Clamp(c.Port,1024,65535); c.HoldDuration=Math.Clamp(c.HoldDuration,1500,3000);
         if(c.Token.Length<32) c.Token=Convert.ToHexString(RandomNumberGenerator.GetBytes(24));
         static bool Color(string v)=>System.Text.RegularExpressions.Regex.IsMatch(v??"","^#[0-9a-fA-F]{6}$");
-        if(!Color(c.Accent))c.Accent="#20E0D0";
+        if(!Color(c.Accent))c.Accent="#00C8FA";
         if(!Color(c.Accent2))c.Accent2="#2B8CFF";
         if(!Color(c.Background))c.Background="#061019";
-        if(!Color(c.Panel))c.Panel="#0D1B25";
+        if(!Color(c.Panel))c.Panel="#063044";
         c.PanelOpacity=Math.Clamp(c.PanelOpacity,60,100);
         c.FontScale=Math.Clamp(c.FontScale,85,120);
         c.Radius=Math.Clamp(c.Radius,0,20);
         c.Glow=Math.Clamp(c.Glow,0,100);
         c.QuickColumns=Math.Clamp(c.QuickColumns,6,12);
         if(!new[]{"compact","comfortable","large"}.Contains(c.Density,StringComparer.OrdinalIgnoreCase))c.Density="comfortable";
-        if(!new[]{"nebula","graphite","tactical","minimal"}.Contains(c.Theme,StringComparer.OrdinalIgnoreCase))c.Theme="nebula";
+        if(!new[]{"nebula","graphite","tactical","minimal","amber","solar","violet"}.Contains(c.Theme,StringComparer.OrdinalIgnoreCase))c.Theme="nebula";
         if(c.Language!="fr"&&c.Language!="en")c.Language="fr";
         c.Save(); return c;
     }

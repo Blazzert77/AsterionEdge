@@ -1,3 +1,7 @@
+# 0.3.0-design.1
+
+Refonte du cockpit selon les références visuelles, sept palettes, boucliers intégrés, modes à pied / minage / récupération, 42 commandes configurables et éditeur de raccourcis. Corrections du démarrage Windows et du heartbeat. Voir [les notes de version](docs/release-design.1.md).
+
 # Asterion Edge — changelog de développement
 
 ## v0.3.0-dev.3 — MFD-first redesign

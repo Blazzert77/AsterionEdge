@@ -24,7 +24,7 @@ try {
     & $DotNetExe publish companion/Asterion.Companion -c $Configuration -r win-x64 --self-contained true -p:PublishReadyToRun=false -o release/Companion
     if($LASTEXITCODE -ne 0){throw 'Publish failed'}
 
-    $widgetOut=Join-Path $projectRoot 'asterion-star-citizen-cockpit-v0.3.0-dev.3.icuewidget'
+    $widgetOut=Join-Path $projectRoot 'asterion-star-citizen-cockpit-v0.3.0-design.1.icuewidget'
     if(Get-Command icuewidget -ErrorAction SilentlyContinue){
         icuewidget validate widget
         if($LASTEXITCODE -ne 0){throw 'Widget validation failed'}

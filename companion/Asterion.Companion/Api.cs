@@ -94,6 +94,7 @@ public sealed class Api(Engine engine)
                             last=Environment.TickCount64;
                             if(engine.Actions.Any(a=>a.Id==id&&a.Dangerous)&&!hold.Commit(client,id,engine.Config.HoldDuration))throw new InvalidOperationException("Hold interrupted or too short");
                             await engine.Execute(id);break;
+                        case "binding": engine.SetBinding(id);break;
                         case "context": engine.Context(id);break;
                         case "accent": engine.SetAccent(id);break;
                         case "accent2": engine.SetAccent2(id);break;
@@ -110,7 +111,7 @@ public sealed class Api(Engine engine)
                         case "manufacturerColors": engine.SetManufacturerColors(id=="1"||id.Equals("true",StringComparison.OrdinalIgnoreCase));break;
                         case "openUpdate": engine.OpenUpdate();break;
                         case "test": engine.TestSignal();break;
-                        case "ping":break;
+                        case "ping":queue.Writer.TryWrite(new{type="pong"});break;
                         default:throw new ArgumentException("Unknown message type");
                     }
                     if(requestId!="")queue.Writer.TryWrite(new{type="ack",requestId,ok=true});

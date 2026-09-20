@@ -48,7 +48,7 @@ public sealed class MainForm : Form
         var auto=new CheckBox(){Text="Changement automatique de page selon le contexte disponible",AutoSize=true,Checked=e.Config.AutoContext};auto.CheckedChanged+=(_,_)=>{e.Config.AutoContext=auto.Checked;e.Config.Save();};body.Controls.Add(auto);
         var colors=new CheckBox(){Text="Accent selon le constructeur (si connu)",AutoSize=true,Checked=e.Config.ManufacturerColors};colors.CheckedChanged+=(_,_)=>e.SetManufacturerColors(colors.Checked);body.Controls.Add(colors);
         AddButtons(body,("Couleur personnalisée",()=>{using var d=new ColorDialog();if(d.ShowDialog()==DialogResult.OK){e.SetAccent(ColorTranslator.ToHtml(d.Color));}}));
-        AddButtons(body,("Thème Obsidienne",()=>e.SetTheme("obsidian")),("Thème Graphite",()=>e.SetTheme("graphite")),("Thème Nuit bleue",()=>e.SetTheme("navy")));
+        AddButtons(body,("Thème Cyan",()=>e.SetTheme("nebula")),("Thème Graphite",()=>e.SetTheme("graphite")),("Thème Ambre",()=>e.SetTheme("amber")));
         body.Controls.Add(new Label(){Text="SIMULATEUR · aucune commande clavier n’est envoyée",AutoSize=true,ForeColor=Color.FromArgb(242,192,110)});
         AddButtons(body,("À pied",()=>e.Simulate("ON_FOOT")),("Embarquer",()=>e.Simulate("BOARD_SHIP")),("Combat",()=>e.Simulate("COMBAT")),("Débarquer",()=>e.Simulate("EXIT_SHIP")),("Fin simulation",()=>e.Simulate("STOP")));
         body.Controls.Add(message);
