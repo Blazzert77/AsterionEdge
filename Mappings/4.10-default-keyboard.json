@@ -1,0 +1,25 @@
+{
+  "version": "4.10",
+  "note": "Fallback keyboard defaults used only when the active user profile does not provide a keyboard rebind. Keep this list deliberately small and evidence-based; never guess unknown bindings.",
+  "actions": [
+    {"id":"brake","map":"spaceship_movement","action":"v_brake","input":"kb1_x","evidence":"Community 4.10 control reference"},
+    {"id":"gear","map":"spaceship_movement","action":"v_toggle_landing_system","input":"kb1_n","evidence":"RSI getting-started guide / 4.10 references"},
+    {"id":"vtol","map":"spaceship_movement","action":"v_toggle_vtol","input":"kb1_k","evidence":"Current 4.10 control references"},
+    {"id":"decoupled","map":"spaceship_movement","action":"v_decoupled_toggle","input":"kb1_c","evidence":"Current 4.10 control references"},
+    {"id":"landing","map":"spaceship_movement","action":"v_request_landing","input":"kb1_lalt+n","evidence":"RSI landing guide default shortcut"},
+    {"id":"lights","map":"spaceship_general","action":"v_lights","input":"kb1_l","evidence":"Current 4.10 control references"},
+    {"id":"decoy","map":"spaceship_defensive","action":"v_countermeasure_decoy_launch","input":"kb1_h","evidence":"Current Star Citizen control references"},
+    {"id":"noise","map":"spaceship_defensive","action":"v_countermeasure_noise_launch","input":"kb1_j","evidence":"Current Star Citizen control references"},
+    {"id":"engines","map":"spaceship_power","action":"v_power_toggle_engine","input":"kb1_i","evidence":"Long-standing default ship power controls; fallback only"},
+    {"id":"shields","map":"spaceship_power","action":"v_power_toggle_shields","input":"kb1_o","evidence":"Long-standing default ship power controls; fallback only"},
+    {"id":"weapons","map":"spaceship_power","action":"v_power_toggle_weapons","input":"kb1_p","evidence":"Long-standing default ship power controls; fallback only"},
+    {"id":"power","map":"spaceship_power","action":"v_power_toggle","input":"kb1_u","evidence":"Current community guide / long-standing default"},
+    {"id":"scan","map":"spaceship_scanning","action":"v_scanning_mode","input":"kb1_v","evidence":"Current 4.10 control references"},
+    {"id":"mobiglas","map":"player","action":"mobiglas","input":"kb1_f1","evidence":"RSI missions guide default"},
+    {"id":"interact","map":"player","action":"interaction","input":"kb1_f","evidence":"RSI missions guide default"},
+    {"id":"starmap","map":"player","action":"mobiglasMap","input":"kb1_f2","evidence":"Current Star Citizen community reference"},
+    {"id":"camera","map":"spaceship_view","action":"view_cycle","input":"kb1_f4","evidence":"RSI getting-started guide"},
+    {"id":"eject","map":"spaceship_general","action":"v_eject","input":"kb1_ralt+y","evidence":"Current 4.10 control references"},
+    {"id":"destruct","map":"spaceship_general","action":"v_self_destruct","input":"kb1_backspace","evidence":"Current 4.10 control references"}
+  ]
+}

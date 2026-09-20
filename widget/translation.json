@@ -1,0 +1,14 @@
+{
+  "fr": {
+    "translation": {
+      "name": "Asterion · Cockpit Star Citizen",
+      "description": "Cockpit panoramique local pour XENEON EDGE, avec Companion automatique et interface française."
+    }
+  },
+  "en": {
+    "translation": {
+      "name": "Asterion · Star Citizen Cockpit",
+      "description": "Local panoramic cockpit for XENEON EDGE with automatic Companion link."
+    }
+  }
+}

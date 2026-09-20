@@ -1,0 +1,12 @@
+Asterion Edge 0.2.1 build fix
+
+The previous one-click builder checked only whether dotnet.exe existed.
+That can be true even when Windows has no .NET SDK installed.
+
+0.2.1 now explicitly checks `dotnet --list-sdks` for a .NET 10 SDK.
+If missing, it installs Microsoft.DotNet.SDK.10 with winget and then calls
+the exact x64 dotnet executable path for restore/test/publish.
+
+This fixes the error:
+  No .NET SDKs were found.
+  Restore failed

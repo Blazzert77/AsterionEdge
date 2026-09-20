@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>SC-Xeneon-Companion</AssemblyName>
+    <Version>0.3.0-dev.3</Version>
+    <Product>Asterion Edge Companion</Product>
+    <Description>Local companion for the Asterion XENEON EDGE Star Citizen cockpit.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    <ProjectReference Include="../Asterion.Core/Asterion.Core.csproj"/>
+    <Content Include="../../widget/**/*" Link="widget/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/>
+    <Content Include="../../Mappings/*.json" Link="Mappings/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/>
+  </ItemGroup>
+</Project>
