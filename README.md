@@ -2,7 +2,7 @@
 
 Asterion Edge est un cockpit tactile local pour **CORSAIR XENEON EDGE** et **Star Citizen**.
 
-La dev.3 adopte une logique **MFD-first** : gros contrôles tactiles, groupes Power / Flight / Ship Systems / Target, panneau Boucliers dédié et disposition À pied contextuelle.
+Cette préversion passe sur une logique **MFD-first** : Power, Flight, Ship Systems, Targeting et Shields sont organisés en gros contrôles tactiles utilisables en jeu. Le mode À pied change automatiquement de disposition.
 
 ## Principes
 
@@ -10,8 +10,8 @@ La dev.3 adopte une logique **MFD-first** : gros contrôles tactiles, groupes Po
 - commandes de vaisseau prioritaires ;
 - changement de layout selon le contexte ;
 - éjection / autodestruction protégées par maintien ;
-- boucliers directionnels quand le profil joueur fournit les bindings ;
+- boucliers directionnels disponibles quand le profil joueur fournit les bindings ;
 - aucune fausse télémétrie : commande disponible ≠ état réel confirmé ;
 - Companion local uniquement sur `127.0.0.1`.
 
-Voir `CHANGELOG.md` pour le détail de l'itération.
+Voir `CHANGELOG.md` pour les changements de cette itération.
