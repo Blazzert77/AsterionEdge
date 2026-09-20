@@ -22,14 +22,19 @@ Le projet évolue activement. L'objectif est de proposer une expérience simple 
 
 ## Prochaine version — v0.3.0
 
-- Interface française par défaut
-- Refonte UX centrée sur le pilotage
-- Détection de contexte améliorée
-- Gestion plus fiable des keybinds
-- Personnalisation des couleurs et thèmes
-- Informations serveur / shard / localisation lorsque disponibles
-- Préparation du système de mise à jour automatique
-- Exploration du suivi économique et des missions lorsque les données peuvent être récupérées proprement
+La v0.3.0 est une refonte majeure de l'expérience Asterion Edge :
+
+- Nouvelle interface plus moderne, contextuelle et centrée sur le pilotage
+- Interface française par défaut et choix de langue
+- Personnalisation avancée : thèmes, couleurs, densité et actions rapides
+- Détection améliorée du contexte ON FOOT / FLIGHT
+- Refonte du système de keybinds et réduction des faux NOT BOUND
+- Affichage des informations de session réellement disponibles : build, shard, localisation, événements
+- Préparation d'un système de mise à jour via GitHub Releases
+- Version affichée de manière cohérente partout : v0.3.0, v0.3.1, etc.
+- Aucune fausse télémétrie : commande disponible ≠ état réel confirmé
+
+La roadmap détaillée est disponible dans [ROADMAP.md](ROADMAP.md).
 
 ## Philosophie
 
