@@ -1,0 +1,1 @@
+{"name":"asterion-edge-dev","private":true,"version":"0.3.0-dev.3","scripts":{"test:protocol":"node --test tests/protocol.test.cjs","test:ui":"node tests/ui.test.cjs"},"devDependencies":{"playwright":"1.62.1"}}

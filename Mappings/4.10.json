@@ -1,0 +1,636 @@
+{
+  "version": "4.10-local-candidates",
+  "note": "No default keys assumed. IDs require an exact match in the selected player XML. Empty IDs must be assigned manually after checking current in-game controls.",
+  "actions": [
+    {
+      "id": "master",
+      "label": "Master mode",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_master_mode_cycle",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "brake",
+      "label": "Space brake",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_brake",
+      "dangerous": false,
+      "pressMs": 650,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "gear",
+      "label": "Landing gear",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_toggle_landing_system",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "vtol",
+      "label": "VTOL",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_toggle_vtol",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "cruise",
+      "label": "Cruise control",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_toggle_cruise_control",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "decoupled",
+      "label": "Decoupled",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_decoupled_toggle",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "limiter",
+      "label": "Speed limiter",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_toggle_speed_limiter",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "gsafe",
+      "label": "G-safe",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_ifcs_toggle_gforce_safety",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "esp",
+      "label": "ESP",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_ifcs_toggle_esp",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "landing",
+      "label": "Request landing",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_request_landing",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "autoland",
+      "label": "Autoland",
+      "page": "Flight",
+      "map": "spaceship_movement",
+      "action": "v_autoland",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "lights",
+      "label": "Ship lights",
+      "page": "Flight",
+      "map": "spaceship_general",
+      "action": "v_lights",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "lock",
+      "label": "Target lock",
+      "page": "Combat",
+      "map": "spaceship_targeting",
+      "action": "v_target_under_reticle",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "hostile",
+      "label": "Next hostile",
+      "page": "Combat",
+      "map": "spaceship_targeting",
+      "action": "v_target_cycle_hostile_fwd",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "attacker",
+      "label": "Next attacker",
+      "page": "Combat",
+      "map": "spaceship_targeting",
+      "action": "v_target_cycle_attacker_fwd",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "missile",
+      "label": "Missile mode",
+      "page": "Combat",
+      "map": "spaceship_weapons",
+      "action": "v_toggle_missile_mode",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "arm",
+      "label": "Arm missile",
+      "page": "Combat",
+      "map": "spaceship_weapons",
+      "action": "v_weapon_arm",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "decoy",
+      "label": "Decoy",
+      "page": "Combat",
+      "map": "spaceship_defensive",
+      "action": "v_countermeasure_decoy_launch",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "noise",
+      "label": "Noise",
+      "page": "Combat",
+      "map": "spaceship_defensive",
+      "action": "v_countermeasure_noise_launch",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "group",
+      "label": "Weapon group",
+      "page": "Combat",
+      "map": "spaceship_weapons",
+      "action": "v_weapon_cycle_firegroup",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "engines",
+      "label": "Engines",
+      "page": "Power",
+      "map": "spaceship_power",
+      "action": "v_power_toggle_engine",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "shields",
+      "label": "Shields",
+      "page": "Power",
+      "map": "spaceship_power",
+      "action": "v_power_toggle_shields",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "weapons",
+      "label": "Weapons",
+      "page": "Power",
+      "map": "spaceship_power",
+      "action": "v_power_toggle_weapons",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "coolers",
+      "label": "Coolers",
+      "page": "Power",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Reserved manual binding until a current automatic action identifier is verified"
+    },
+    {
+      "id": "power",
+      "label": "Power toggle",
+      "page": "Power",
+      "map": "spaceship_power",
+      "action": "v_power_toggle",
+      "dangerous": true,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "pw",
+      "label": "Power → weapons",
+      "page": "Power",
+      "map": "spaceship_power",
+      "action": "v_power_focus_weapons",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "pt",
+      "label": "Power → thrusters",
+      "page": "Power",
+      "map": "spaceship_power",
+      "action": "v_power_focus_engines",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "ps",
+      "label": "Power → shields",
+      "page": "Power",
+      "map": "spaceship_power",
+      "action": "v_power_focus_shields",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "balance",
+      "label": "Balance power",
+      "page": "Power",
+      "map": "spaceship_power",
+      "action": "v_power_reset_focus",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "friendly",
+      "label": "Next friendly",
+      "page": "Targeting",
+      "map": "spaceship_targeting",
+      "action": "v_target_cycle_friendly_fwd",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "subtarget",
+      "label": "Subcomponent",
+      "page": "Targeting",
+      "map": "spaceship_targeting",
+      "action": "v_target_cycle_subitem_fwd",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "pin",
+      "label": "Pin target",
+      "page": "Targeting",
+      "map": "spaceship_targeting",
+      "action": "v_target_pin_index_1",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "scan",
+      "label": "Scan mode",
+      "page": "Targeting",
+      "map": "spaceship_scanning",
+      "action": "v_scanning_mode",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "ping",
+      "label": "Ping",
+      "page": "Targeting",
+      "map": "spaceship_scanning",
+      "action": "v_scanning_ping",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "helmet",
+      "label": "Helmet",
+      "page": "FPS",
+      "map": "player",
+      "action": "toggle_helmet",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "flashlight",
+      "label": "Flashlight",
+      "page": "FPS",
+      "map": "player",
+      "action": "flashlight",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "wipe",
+      "label": "Wipe visor",
+      "page": "FPS",
+      "map": "player",
+      "action": "wipe_visor",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "mobiglas",
+      "label": "mobiGlas",
+      "page": "FPS",
+      "map": "player",
+      "action": "mobiglas",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "inventory",
+      "label": "Inventory",
+      "page": "FPS",
+      "map": "player_choice",
+      "action": "pc_pit_inventory",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Observed in local 4.10 profile"
+    },
+    {
+      "id": "interact",
+      "label": "Interaction",
+      "page": "FPS",
+      "map": "player",
+      "action": "interaction",
+      "dangerous": false,
+      "pressMs": 650,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "primary",
+      "label": "Primary weapon",
+      "page": "FPS",
+      "map": "player",
+      "action": "selectPrimaryWeapon",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "secondary",
+      "label": "Secondary weapon",
+      "page": "FPS",
+      "map": "player",
+      "action": "selectSecondaryWeapon",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "sidearm",
+      "label": "Sidearm",
+      "page": "FPS",
+      "map": "player",
+      "action": "selectSidearm",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "reload",
+      "label": "Reload",
+      "page": "FPS",
+      "map": "player",
+      "action": "reload",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "firemode",
+      "label": "Fire mode",
+      "page": "FPS",
+      "map": "player",
+      "action": "firemode",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "heal",
+      "label": "Heal",
+      "page": "FPS",
+      "map": "player",
+      "action": "use_medical",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "starmap",
+      "label": "Starmap",
+      "page": "Systems",
+      "map": "player",
+      "action": "mobiglasMap",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "doors",
+      "label": "Unlock doors",
+      "page": "Systems",
+      "map": "spaceship_general",
+      "action": "v_unlock_all_doors",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Observed in local 4.10 profile"
+    },
+    {
+      "id": "camera",
+      "label": "External camera",
+      "page": "Systems",
+      "map": "spaceship_view",
+      "action": "view_cycle",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "headtrack",
+      "label": "Head tracking",
+      "page": "Systems",
+      "map": "spaceship_view",
+      "action": "v_toggle_headtracking",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "mfd",
+      "label": "MFD next",
+      "page": "Systems",
+      "map": "spaceship_general",
+      "action": "v_mfd_cycle",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "eject",
+      "label": "Eject",
+      "page": "Systems",
+      "map": "spaceship_general",
+      "action": "v_eject",
+      "dangerous": true,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "destruct",
+      "label": "Self destruct",
+      "page": "Systems",
+      "map": "spaceship_general",
+      "action": "v_self_destruct",
+      "dangerous": true,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "sf",
+      "label": "Shield front",
+      "page": "Shields",
+      "map": "spaceship_defensive",
+      "action": "v_shield_raise_level_forward",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Verified Star Citizen action-map identifier; player profile or manual override still supplies the input"
+    },
+    {
+      "id": "sr",
+      "label": "Shield rear",
+      "page": "Shields",
+      "map": "spaceship_defensive",
+      "action": "v_shield_raise_level_back",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Verified Star Citizen action-map identifier; player profile or manual override still supplies the input"
+    },
+    {
+      "id": "sl",
+      "label": "Shield left",
+      "page": "Shields",
+      "map": "spaceship_defensive",
+      "action": "v_shield_raise_level_left",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Verified Star Citizen action-map identifier; player profile or manual override still supplies the input"
+    },
+    {
+      "id": "sright",
+      "label": "Shield right",
+      "page": "Shields",
+      "map": "spaceship_defensive",
+      "action": "v_shield_raise_level_right",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Verified Star Citizen action-map identifier; player profile or manual override still supplies the input"
+    },
+    {
+      "id": "stop",
+      "label": "Shield top",
+      "page": "Shields",
+      "map": "spaceship_defensive",
+      "action": "v_shield_raise_level_up",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Verified Star Citizen action-map identifier; player profile or manual override still supplies the input"
+    },
+    {
+      "id": "sbottom",
+      "label": "Shield bottom",
+      "page": "Shields",
+      "map": "spaceship_defensive",
+      "action": "v_shield_raise_level_down",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Verified Star Citizen action-map identifier; player profile or manual override still supplies the input"
+    },
+    {
+      "id": "sreset",
+      "label": "Balance shields",
+      "page": "Shields",
+      "map": "spaceship_defensive",
+      "action": "v_shield_reset_level",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Verified Star Citizen action-map identifier; player profile or manual override still supplies the input"
+    },
+    {
+      "id": "salute",
+      "label": "Salute",
+      "page": "Emotes",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "wave",
+      "label": "Wave",
+      "page": "Emotes",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    },
+    {
+      "id": "respect",
+      "label": "Respect",
+      "page": "Emotes",
+      "map": "",
+      "action": "",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+    }
+  ]
+}
