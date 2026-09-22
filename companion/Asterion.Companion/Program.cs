@@ -9,7 +9,8 @@ static class Program
         bool simulate=args.Contains("--simulate");
         if(portable) Config.DataDir=Path.Combine(AppContext.BaseDirectory,"data");
         int index=Array.IndexOf(args,"--data");if(index>=0&&index+1<args.Length)Config.DataDir=Path.GetFullPath(args[index+1]);
-        using var mutex=new Mutex(true,@"Local\AsterionEdgeCompanion",out bool first);
+        string instance=simulate&&index>=0?"-test-"+Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(Config.DataDir)))[..12]:"";
+        using var mutex=new Mutex(true,@"Local\AsterionEdgeCompanion"+instance,out bool first);
         if(!first){if(!background)MessageBox.Show("Asterion Edge est déjà ouvert.");return;}
         try
         {

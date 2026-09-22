@@ -1,3 +1,7 @@
+# 0.3.0-design.2
+
+Distribution d’énergie moderne, correction des commandes à partir du profil du jeu, portes distinctes du déverrouillage et indicateurs persistants estimés avec synchronisation manuelle. Sortie du siège reconnue ; entrée en attente de validation. Voir [les notes de version](docs/release-design.2.md).
+
 # 0.3.0-design.1
 
 Refonte du cockpit selon les références visuelles, sept palettes, boucliers intégrés, modes à pied / minage / récupération, 42 commandes configurables et éditeur de raccourcis. Corrections du démarrage Windows et du heartbeat. Voir [les notes de version](docs/release-design.1.md).

@@ -2,24 +2,418 @@
   "version": "4.10",
   "note": "Fallback keyboard defaults used only when the active user profile does not provide a keyboard rebind. Keep this list deliberately small and evidence-based; never guess unknown bindings.",
   "actions": [
-    {"id":"brake","map":"spaceship_movement","action":"v_brake","input":"kb1_x","evidence":"Community 4.10 control reference"},
-    {"id":"gear","map":"spaceship_movement","action":"v_toggle_landing_system","input":"kb1_n","evidence":"RSI getting-started guide / 4.10 references"},
-    {"id":"vtol","map":"spaceship_movement","action":"v_toggle_vtol","input":"kb1_k","evidence":"Current 4.10 control references"},
-    {"id":"decoupled","map":"spaceship_movement","action":"v_decoupled_toggle","input":"kb1_c","evidence":"Current 4.10 control references"},
-    {"id":"landing","map":"spaceship_movement","action":"v_request_landing","input":"kb1_lalt+n","evidence":"RSI landing guide default shortcut"},
-    {"id":"lights","map":"spaceship_general","action":"v_lights","input":"kb1_l","evidence":"Current 4.10 control references"},
-    {"id":"decoy","map":"spaceship_defensive","action":"v_countermeasure_decoy_launch","input":"kb1_h","evidence":"Current Star Citizen control references"},
-    {"id":"noise","map":"spaceship_defensive","action":"v_countermeasure_noise_launch","input":"kb1_j","evidence":"Current Star Citizen control references"},
-    {"id":"engines","map":"spaceship_power","action":"v_power_toggle_engine","input":"kb1_i","evidence":"Long-standing default ship power controls; fallback only"},
-    {"id":"shields","map":"spaceship_power","action":"v_power_toggle_shields","input":"kb1_o","evidence":"Long-standing default ship power controls; fallback only"},
-    {"id":"weapons","map":"spaceship_power","action":"v_power_toggle_weapons","input":"kb1_p","evidence":"Long-standing default ship power controls; fallback only"},
-    {"id":"power","map":"spaceship_power","action":"v_power_toggle","input":"kb1_u","evidence":"Current community guide / long-standing default"},
-    {"id":"scan","map":"spaceship_scanning","action":"v_scanning_mode","input":"kb1_v","evidence":"Current 4.10 control references"},
-    {"id":"mobiglas","map":"player","action":"mobiglas","input":"kb1_f1","evidence":"RSI missions guide default"},
-    {"id":"interact","map":"player","action":"interaction","input":"kb1_f","evidence":"RSI missions guide default"},
-    {"id":"starmap","map":"player","action":"mobiglasMap","input":"kb1_f2","evidence":"Current Star Citizen community reference"},
-    {"id":"camera","map":"spaceship_view","action":"view_cycle","input":"kb1_f4","evidence":"RSI getting-started guide"},
-    {"id":"eject","map":"spaceship_general","action":"v_eject","input":"kb1_ralt+y","evidence":"Current 4.10 control references"},
-    {"id":"destruct","map":"spaceship_general","action":"v_self_destruct","input":"kb1_backspace","evidence":"Current 4.10 control references"}
+    {
+      "id": "gear",
+      "map": "spaceship_movement",
+      "action": "v_toggle_landing_system",
+      "input": "kb1_n",
+      "evidence": "RSI getting-started guide / 4.10 references"
+    },
+    {
+      "id": "shields",
+      "map": "spaceship_power",
+      "action": "v_power_toggle_shields",
+      "input": "kb1_o",
+      "evidence": "Long-standing default ship power controls; fallback only"
+    },
+    {
+      "id": "weapons",
+      "map": "spaceship_power",
+      "action": "v_power_toggle_weapons",
+      "input": "kb1_p",
+      "evidence": "Long-standing default ship power controls; fallback only"
+    },
+    {
+      "id": "power",
+      "map": "spaceship_power",
+      "action": "v_power_toggle",
+      "input": "kb1_u",
+      "evidence": "Current community guide / long-standing default"
+    },
+    {
+      "id": "mobiglas",
+      "map": "player",
+      "action": "mobiglas",
+      "input": "kb1_f1",
+      "evidence": "RSI missions guide default"
+    },
+    {
+      "id": "interact",
+      "map": "player",
+      "action": "interaction",
+      "input": "kb1_f",
+      "evidence": "RSI missions guide default"
+    },
+    {
+      "id": "eject",
+      "map": "seat_general",
+      "action": "v_eject",
+      "input": "kb1_ralt+y",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "destruct",
+      "map": "spaceship_general",
+      "action": "v_self_destruct",
+      "input": "kb1_backspace",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "startup",
+      "map": "spaceship_general",
+      "action": "v_flightready",
+      "input": "kb1_ralt+r",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "engines",
+      "map": "spaceship_power",
+      "action": "v_power_toggle_thrusters",
+      "input": "kb1_i",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "lights",
+      "map": "lights_controller",
+      "action": "v_lights",
+      "input": "kb1_l",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "brake",
+      "map": "spaceship_movement",
+      "action": "v_space_brake",
+      "input": "kb1_x",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "vtol",
+      "map": "spaceship_movement",
+      "action": "v_vtol_toggle",
+      "input": "kb1_k",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "decoupled",
+      "map": "spaceship_movement",
+      "action": "v_ifcs_vector_decoupling_toggle",
+      "input": "kb1_c",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "landing",
+      "map": "spaceship_movement",
+      "action": "v_atc_request",
+      "input": "kb1_lalt+n",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "master",
+      "map": "spaceship_movement",
+      "action": "v_master_mode_cycle_long",
+      "input": "kb1_b",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "scan",
+      "map": "seat_general",
+      "action": "v_toggle_scan_mode",
+      "input": "kb1_v",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "camera",
+      "map": "spaceship_view",
+      "action": "v_view_cycle_fwd",
+      "input": "kb1_f4",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "starmap",
+      "map": "player",
+      "action": "v_starmap",
+      "input": "kb1_f2",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "flashlight",
+      "map": "player",
+      "action": "toggle_flashlight",
+      "input": "kb1_t",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "helmet",
+      "map": "player",
+      "action": "toggleEquipHelmet",
+      "input": "kb1_ralt+h",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "helmetstow",
+      "map": "player",
+      "action": "toggleAttachHelmet",
+      "input": "kb1_lalt+h",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "wipe",
+      "map": "player",
+      "action": "visor_wipe",
+      "input": "kb1_lalt+x",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "primary",
+      "map": "player",
+      "action": "select_primary_pit",
+      "input": "kb1_1",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "secondary",
+      "map": "player",
+      "action": "select_secondary_pit",
+      "input": "kb1_2",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "sidearm",
+      "map": "player",
+      "action": "select_sidearm_pit",
+      "input": "kb1_3",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "melee",
+      "map": "player",
+      "action": "select_meleeweapon_pit",
+      "input": "kb1_v",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "reload2",
+      "map": "player",
+      "action": "reloadSecondary",
+      "input": "kb1_lalt+b",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "lower",
+      "map": "player",
+      "action": "toggle_lowered",
+      "input": "kb1_lalt+r",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "firemode",
+      "map": "player",
+      "action": "weapon_change_firemode",
+      "input": "kb1_b",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "zeroUp",
+      "map": "player",
+      "action": "weapon_zeroing_increase",
+      "input": "kb1_pgup",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "zeroDown",
+      "map": "player",
+      "action": "weapon_zeroing_decrease",
+      "input": "kb1_pgdn",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "lightamp",
+      "map": "seat_general",
+      "action": "v_light_amplification_toggle",
+      "input": "kb1_ralt+l",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "decoy",
+      "map": "spaceship_defensive",
+      "action": "v_weapon_countermeasure_decoy_launch",
+      "input": "kb1_h",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "noise",
+      "map": "spaceship_defensive",
+      "action": "v_weapon_countermeasure_noise_launch",
+      "input": "kb1_j",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "pin",
+      "map": "spaceship_targeting",
+      "action": "v_target_toggle_pin_index_1",
+      "input": "kb1_lalt+1",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "pin2",
+      "map": "spaceship_targeting",
+      "action": "v_target_toggle_pin_index_2",
+      "input": "kb1_lalt+2",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "cycleall",
+      "map": "spaceship_targeting_advanced",
+      "action": "v_target_cycle_all_fwd",
+      "input": "kb1_7",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "subreset",
+      "map": "spaceship_targeting_advanced",
+      "action": "v_target_cycle_subitem_reset",
+      "input": "kb1_lalt+r",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "hostile",
+      "map": "spaceship_targeting_advanced",
+      "action": "v_target_cycle_hostile_fwd",
+      "input": "kb1_5",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "friendly",
+      "map": "spaceship_targeting_advanced",
+      "action": "v_target_cycle_friendly_fwd",
+      "input": "kb1_6",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "attacker",
+      "map": "spaceship_targeting_advanced",
+      "action": "v_target_cycle_attacker_fwd",
+      "input": "kb1_4",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "subtarget",
+      "map": "spaceship_targeting_advanced",
+      "action": "v_target_cycle_subitem_fwd",
+      "input": "kb1_r",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "weaponsUp",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_increase",
+      "input": "kb1_f5",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "weaponsDown",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_decrease",
+      "input": "kb1_lalt+f5",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "weaponsMax",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_max",
+      "input": "kb1_f5",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "weaponsMin",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_min",
+      "input": "kb1_lalt+f5",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "enginesUp",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_increase",
+      "input": "kb1_f6",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "enginesDown",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_decrease",
+      "input": "kb1_lalt+f6",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "enginesMax",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_max",
+      "input": "kb1_f6",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "enginesMin",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_min",
+      "input": "kb1_lalt+f6",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "shieldsUp",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_increase",
+      "input": "kb1_f7",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "shieldsDown",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_decrease",
+      "input": "kb1_lalt+f7",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "shieldsMax",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_max",
+      "input": "kb1_f7",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "shieldsMin",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_min",
+      "input": "kb1_lalt+f7",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "pw",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_max",
+      "input": "kb1_f5",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "pt",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_max",
+      "input": "kb1_f6",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "ps",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_max",
+      "input": "kb1_f7",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    },
+    {
+      "id": "balance",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_reset",
+      "input": "kb1_f8",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644 (2026-09-22)"
+    }
   ]
 }

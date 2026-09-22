@@ -61,4 +61,4 @@ jobs:
             Write-Host "Release $tag already exists; preserving published assets."
             exit 0
           }
-          gh release create $tag release/AsterionEdge-Setup-*.exe release/AsterionEdge-portable-*.zip asterion-star-citizen-cockpit-*.icuewidget --target "${{ github.sha }}" --title "Asterion Edge $tag" --notes-file docs/release-design.1.md --prerelease
+          gh release create $tag release/AsterionEdge-Setup-*.exe release/AsterionEdge-portable-*.zip asterion-star-citizen-cockpit-*.icuewidget --target "${{ github.sha }}" --title "Asterion Edge $tag" --notes-file docs/release-design.2.md --prerelease

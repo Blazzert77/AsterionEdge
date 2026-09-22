@@ -10,6 +10,7 @@ public record DefaultBindingSpec(string Id,string Map,string Action,string Input
 public record DefaultBindingCatalog(string Version,string Note,List<DefaultBindingSpec> Actions);
 public sealed class Config
 {
+    public int CommandSchema { get; set; }
     public string StarCitizenPath { get; set; } = "";
     public string Branch { get; set; } = "LIVE";
     public string BindingProfile { get; set; } = "";
@@ -64,6 +65,7 @@ public sealed class Config
         if(!new[]{"compact","comfortable","large"}.Contains(c.Density,StringComparer.OrdinalIgnoreCase))c.Density="comfortable";
         if(!new[]{"nebula","graphite","tactical","minimal","amber","solar","violet"}.Contains(c.Theme,StringComparer.OrdinalIgnoreCase))c.Theme="nebula";
         if(c.Language!="fr"&&c.Language!="en")c.Language="fr";
+        if(c.CommandSchema<2){if(c.Overrides.Remove("doors",out var oldDoors)&&!c.Overrides.ContainsKey("doorunlock"))c.Overrides["doorunlock"]=oldDoors;c.CommandSchema=2;}
         c.Save(); return c;
     }
     public void Save()

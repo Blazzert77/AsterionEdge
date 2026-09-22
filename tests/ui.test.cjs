@@ -9,7 +9,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
   await page.goto(base);await page.getByText('CONNECTÉ',{exact:true}).waitFor();
   await page.getByRole('button',{name:'VAISSEAU',exact:true}).click();await page.locator('.mfd-layout').waitFor();
   assert.equal(await page.locator('.target-panel [data-action]').count(),12);
-  await page.getByRole('button',{name:'SHIELDS',exact:true}).click();assert.equal(await page.locator('.shield-action').count(),7);
+  assert.equal(await page.locator('.pip-channel').count(),3);assert.equal(await page.locator('.shield-action').count(),0);await page.locator('[data-action=weaponsUp]').click();await page.waitForFunction(()=>document.querySelector('.pip-title small')?.textContent.includes('+1'));await page.getByRole('button',{name:'SYSTÈMES',exact:true}).click();await page.waitForTimeout(250);await page.locator('[data-action=doorsOpen]').click();await page.waitForFunction(()=>document.querySelector('[data-action=doors]')?.classList.contains('estimated-on'));await page.waitForTimeout(250);await page.locator('[data-action=doorsClose]').click();await page.waitForFunction(()=>document.querySelector('[data-action=doors]')?.classList.contains('estimated-off'));
   const eject=page.locator('[data-action=eject]');await eject.click();await page.waitForTimeout(250);assert(!(await page.locator('#toast').innerText()).includes('Simulation : Éjection'));
   let box=await eject.boundingBox();await page.mouse.move(box.x+15,box.y+15);await page.mouse.down();await page.waitForTimeout(2200);await page.mouse.up();await page.getByText('Simulation : Éjection',{exact:true}).waitFor();
   // Releasing a hold or losing focus must not execute another dangerous action.
@@ -26,6 +26,6 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
   await page.waitForTimeout(14000);assert.equal(await page.locator('#connection').innerText(),'CONNECTÉ');
   await page.getByRole('button',{name:'VAISSEAU',exact:true}).click();await page.locator('.mfd-layout').waitFor();
   for(const [width,height] of [[2560,720],[1920,550],[1280,400],[1024,768],[390,844]]){await page.setViewportSize({width,height});await page.waitForTimeout(100);const metrics=await page.evaluate(()=>({w:document.documentElement.clientWidth,s:document.documentElement.scrollWidth}));assert(metrics.s<=metrics.w,`Horizontal overflow at ${width}`);assert(await page.locator('.target-panel').isVisible());}
-  assert.deepEqual(errors,[]);console.log('PASS: reference layouts, shields, mining/salvage, hold/cancel, foot weapons, persisted palettes and bindings, heartbeat, responsive layouts');
+  assert.deepEqual(errors,[]);console.log('PASS: reference layouts, power points and persistent indicators, mining/salvage, hold/cancel, foot weapons, persisted palettes and bindings, heartbeat, responsive layouts');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1});

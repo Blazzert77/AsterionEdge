@@ -52,6 +52,8 @@ public record KeyChord(ushort[] ScanCodes, int MouseButton = 0)
             else return false;
         }
         if (codes.Distinct().Count() != codes.Count) return false;
+        // Modifier-first ordering matters for chords written as f6+lalt by the game.
+        codes = codes.OrderBy(c => c is 29 or 42 or 54 or 56 or 0x11d or 0x138 ? 0 : 1).ToList();
         chord = new(codes.ToArray(), mouse); return true;
     }
 }

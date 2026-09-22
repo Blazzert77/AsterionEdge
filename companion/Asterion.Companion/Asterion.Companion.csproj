@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>SC-Xeneon-Companion</AssemblyName>
-    <Version>0.3.0-design.1</Version>
+    <Version>0.3.0-design.2</Version>
     <Product>Asterion Edge Companion</Product>
     <Description>Local companion for the Asterion XENEON EDGE Star Citizen cockpit.</Description>
   </PropertyGroup>

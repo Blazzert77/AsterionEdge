@@ -18,6 +18,8 @@ public static class GameLog
     public static LogEvent? Parse(string line, IEnumerable<LogRule>? rules = null)
     {
         if (line.Length > 16_384) return null;
+        if(line.Contains("<Vehicle Control Flow>") && Regex.IsMatch(line,@"CVehicleMovementBase::ClearDriver: Local client node \[\d+\] releasing control token for '[^']+' \[\d+\]",RegexOptions.CultureInvariant,TimeSpan.FromMilliseconds(40)))
+            return new("seat_exit","Sortie du poste de pilotage observée",Asterion.Core.Context.ON_FOOT);
         if (line.Contains("<SystemQuit>")) return new("session", "Arrêt de session détecté", Asterion.Core.Context.UNKNOWN);
 
         var join=JoinPu.Match(line);

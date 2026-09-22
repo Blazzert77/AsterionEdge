@@ -11,8 +11,9 @@ public sealed class Engine : IDisposable
     public readonly object Gate=new();
     public readonly List<ActionSpec> Actions;
     readonly Dictionary<string,DefaultBindingSpec> defaultBindings;
-    public const string CurrentVersion = "0.3.0-design.1";
+    public const string CurrentVersion = "0.3.0-design.2";
     readonly ContextMachine machine=new();
+    readonly CommandFeedback feedback=new();
     readonly LogTail tail=new();
     readonly SemaphoreSlim actionLock=new(1,1);
     List<Binding> bindings=[];
@@ -101,6 +102,8 @@ public sealed class Engine : IDisposable
         if(keyboard.Length==1)return(keyboard[0],action.PressMs,"PROFIL JOUEUR");
         if(keyboard.Length>1)return("",0,"BINDING CLAVIER AMBIGU");
 
+        if(matches.Any(b=>b.Status!="BOUND"&&(b.Input==""||b.Input.StartsWith("kb1_",StringComparison.OrdinalIgnoreCase))))return("",0,"PROFIL : NON LIÉ OU ACTIVATION NON PRISE EN CHARGE");
+
         if(defaultBindings.TryGetValue(action.Id,out var fallback)
            && string.Equals(fallback.Map,action.Map,StringComparison.OrdinalIgnoreCase)
            && string.Equals(fallback.Action,action.Action,StringComparison.OrdinalIgnoreCase)
@@ -118,8 +121,10 @@ public sealed class Engine : IDisposable
             appearance=new { theme=Config.Theme,accent=Accent(),accent2=Config.Accent2,background=Config.Background,panel=Config.Panel,panelOpacity=Config.PanelOpacity,fontScale=Config.FontScale,radius=Config.Radius,glow=Config.Glow,quickColumns=Config.QuickColumns,density=Config.Density,animations=Config.Animations,manufacturerColors=Config.ManufacturerColors },
             economy=new { balance=AuecBalance,sessionEarnings=SessionEarnings,sessionCashflow=SessionCashflow,mission=ActiveMission,source=(SessionEarnings.HasValue||SessionCashflow.HasValue)?"GAME.LOG":"UNAVAILABLE",note="Flux observé uniquement — pas un solde ni une comptabilité complète" },
             update=new { checkedRemote=Update.Checked,available=Update.Available,current=Update.CurrentVersion,latest=Update.LatestVersion,url=Update.Url,error=Update.Error },
+            powerAdjustments=new {weapons=feedback.Delta("weapons"),engines=feedback.Delta("engines"),shields=feedback.Delta("shields"),source="COMMANDS_ONLY"},
+            contextHint="AUTO nécessite un événement de contrôle local dans Game.log. Aucun état matériel n’est lu.",
             bindingCount=bindings.Count, defaultBindingCount=defaultBindings.Count, bindingError=BindingError,feed=feed.ToArray(),
-            actions=Actions.Select(a=>{ var b=Resolve(a);return new {a.Id,a.Label,a.Page,a.Dangerous,a.Evidence,bound=b.Input!="",input=b.Input,source=b.Source,pressMs=b.Press,stateKnown=false};}).ToArray()
+            actions=Actions.Select(a=>{ var b=Resolve(a);return new {a.Id,a.Label,a.Page,a.Dangerous,a.Evidence,bound=b.Input!="",input=b.Input,source=b.Source,pressMs=b.Press,stateKnown=false,estimatedActive=feedback.Estimate(a.Id),feedbackTouched=feedback.Touched(a.Id),feedbackSupported=CommandFeedback.Toggles.Contains(a.Id)};}).ToArray()
         };
     }
     string Accent()
@@ -136,6 +141,7 @@ public sealed class Engine : IDisposable
     {
         lock(Gate)
         {
+            feedback.Reset();
             machine.Force(context=="AUTO"?null:Enum.Parse<Asterion.Core.Context>(context??"UNKNOWN"));
             Add("Context: "+machine.Current,"MANUAL");
         }
@@ -165,11 +171,11 @@ public sealed class Engine : IDisposable
         {
             ActionSpec spec; (string Input,int Press,string Source) b; bool sim;
             lock(Gate) { spec=Actions.SingleOrDefault(a=>a.Id==id)??throw new ArgumentException("Unknown action"); b=Resolve(spec);sim=Simulation; }
-            if(sim) { lock(Gate)Add("Test command: "+spec.Label,"SIMULATION · NO INPUT");Changed?.Invoke();return; }
+            if(sim) { lock(Gate){feedback.Sent(id);Add("Test command: "+spec.Label,"SIMULATION · NO INPUT");}Changed?.Invoke();return; }
             if(!KeyChord.TryParse(b.Input,out var chord))throw new InvalidOperationException("Binding absent or unsupported");
             if(!Running)throw new InvalidOperationException("Star Citizen is stopped");
             await WindowsInput.Send(chord,b.Press,Config.RestoreFocusFromIcue);
-            lock(Gate)Add("Command sent: "+spec.Label,"INPUT · STATE UNKNOWN");
+            lock(Gate){feedback.Sent(id);Add("Command sent: "+spec.Label,"INPUT · STATE UNKNOWN");}
             Log.Write("Command sent: "+spec.Id);Changed?.Invoke();
         }
         finally { actionLock.Release(); }
@@ -185,6 +191,15 @@ public sealed class Engine : IDisposable
         return Math.Clamp(parsed,min,max);
     }
     void SaveAppearance(Action change){lock(Gate){change();Config.Save();}Changed?.Invoke();}
+    public void SetIndicator(string json)
+    {
+        using var document=JsonDocument.Parse(json);
+        string id=document.RootElement.GetProperty("id").GetString()??"";
+        var value=document.RootElement.GetProperty("value");
+        bool? active=value.ValueKind==JsonValueKind.Null?null:value.GetBoolean();
+        lock(Gate){feedback.Calibrate(id,active);}Changed?.Invoke();
+    }
+    public void ResetIndicators(){lock(Gate)feedback.Reset();Changed?.Invoke();}
     public void SetBinding(string json)
     {
         using var document=JsonDocument.Parse(json);
@@ -274,12 +289,13 @@ public sealed class Engine : IDisposable
                         }
                     }catch(System.ComponentModel.Win32Exception) { }catch(InvalidOperationException) { }
                     finally { foreach(var p in processes)p.Dispose(); }
-                    if(running!=Running) { Running=running;if(!Simulation){machine.Reset();Ship=null;Location=null;Shard=null;ActiveMission=null;SessionEarnings=running?0:null;SessionCashflow=running?0:null;}Add(running?"Star Citizen démarré":"Star Citizen arrêté","PROCESS"); }
+                    if(running!=Running) { Running=running;feedback.Reset();if(!Simulation){machine.Reset();Ship=null;Location=null;Shard=null;ActiveMission=null;SessionEarnings=running?0:null;SessionCashflow=running?0:null;}Add(running?"Star Citizen démarré":"Star Citizen arrêté","PROCESS"); }
                     tail.SetPath(LogPath);
                     foreach(var line in tail.Read(++tick%10==0))
                     {
                         if(Simulation||!Running)continue;
                         var e=GameLog.Parse(line,Config.LogRules); if(e==null)continue;
+                        if(e.Context.HasValue&&machine.Detected!=e.Context.Value)feedback.Reset();
                         machine.Apply(e);
                         if(e.Context.HasValue && e.Ship!=null)Ship=e.Ship;
                         if(!string.IsNullOrWhiteSpace(e.Location))Location=e.Location;
