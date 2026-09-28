@@ -1,6 +1,6 @@
 # Asterion Edge v0.3.0 — Stable
 
-Première version stable de la branche MFD-first d’Asterion Edge pour le CORSAIR XENEON EDGE.
+Version stable d’Asterion Edge pour le CORSAIR XENEON EDGE, avec l’interface graphique classique de la dernière base dev.2 et les correctifs techniques récents.
 
 ## Correctifs importants
 
@@ -17,15 +17,10 @@ Première version stable de la branche MFD-first d’Asterion Edge pour le CORSA
 - Le Companion répond désormais au heartbeat `ping` du widget avec `pong`.
 - Les contextes manuels invalides sont refusés et `mouse4` / `mouse5` ne sont plus sensibles à la casse.
 
-## Interface MFD-first
+## Interface
 
-- Gros contrôles tactiles et groupes Power / Flight / Ship Systems / Target.
-- Commandes de boucliers directionnels.
-- Éjection et autodestruction protégées par maintien.
-- Mode À pied réorganisé.
-- Barre de session persistante.
-- Les commandes non liées restent visibles mais désactivées avec leur statut.
-- Aucun faux état de bouclier ou de puissance n’est affiché sans télémétrie fiable.
+- Retour à l’interface graphique classique de la dernière base dev.2.
+- Les correctifs de stabilité, bindings, Game.log, configuration, heartbeat et sécurité du maintien sont conservés.
 
 ## Validation
 
