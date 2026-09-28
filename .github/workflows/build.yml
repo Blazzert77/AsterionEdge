@@ -43,7 +43,7 @@ jobs:
       - name: Upload development build
         uses: actions/upload-artifact@v4
         with:
-          name: AsterionEdge-${{ github.ref_name }}-${{ github.sha }}
+          name: AsterionEdge-release-v0.3.0-${{ github.sha }}
           path: |
             release/AsterionEdge-Setup-*.exe
             asterion-star-citizen-cockpit-*.icuewidget
