@@ -3,7 +3,7 @@ setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
 title Asterion Edge - Build and Install
 
-set "ASTERION_VERSION=0.3.0"
+set "ASTERION_VERSION=0.3.1"
 set "DOTNET_EXE=%ProgramFiles%\dotnet\dotnet.exe"
 
  echo.

@@ -11,7 +11,7 @@ public sealed class Engine : IDisposable
     public readonly object Gate=new();
     public readonly List<ActionSpec> Actions;
     readonly Dictionary<string,DefaultBindingSpec> defaultBindings;
-    public const string CurrentVersion = "0.3.0";
+    public const string CurrentVersion = "0.3.1";
     readonly ContextMachine machine=new();
     readonly LogTail tail=new();
     readonly SemaphoreSlim actionLock=new(1,1);
@@ -197,7 +197,21 @@ public sealed class Engine : IDisposable
         return Math.Clamp(parsed,min,max);
     }
     void SaveAppearance(Action change){lock(Gate){change();Config.Save();}Changed?.Invoke();}
-    public void SetAccent(string value)=>SaveAppearance(()=>Config.Accent=RequireColor(value,"accent"));
+    public void SetBinding(string json)
+    {
+        using var document=JsonDocument.Parse(json);
+        var root=document.RootElement;
+        string id=root.GetProperty("id").GetString()??"";
+        if(!Actions.Any(a=>a.Id==id))throw new ArgumentException("Unknown action");
+        string? input=root.GetProperty("input").GetString();
+        if(input!=null&&!KeyChord.TryParse(input,out _))throw new ArgumentException("Raccourci invalide. Exemple : kb1_lalt+n");
+        int press=90;
+        if(input!=null&&(!root.TryGetProperty("pressMs",out var duration)||!duration.TryGetInt32(out press)))throw new ArgumentException("Durée invalide");
+        if(press<30||press>1500)throw new ArgumentException("La durée doit être comprise entre 30 et 1500 ms");
+        lock(Gate){if(input==null)Config.Overrides.Remove(id);else Config.Overrides[id]=new(input!,press);Config.Save();}
+        Changed?.Invoke();
+    }
+    public void SetAccent(string value)=>SaveAppearance(()=>{Config.Accent=RequireColor(value,"accent");Config.ManufacturerColors=false;});
     public void SetAccent2(string value)=>SaveAppearance(()=>Config.Accent2=RequireColor(value,"secondary accent"));
     public void SetBackground(string value)=>SaveAppearance(()=>Config.Background=RequireColor(value,"background"));
     public void SetPanel(string value)=>SaveAppearance(()=>Config.Panel=RequireColor(value,"panel"));
@@ -216,16 +230,20 @@ public sealed class Engine : IDisposable
     public void SetTheme(string value)
     {
         value=(value??"").ToLowerInvariant();
-        if(!new[]{"nebula","graphite","tactical","minimal"}.Contains(value))throw new ArgumentException("Invalid theme");
+        if(!new[]{"nebula","graphite","tactical","minimal","amber","solar","violet"}.Contains(value))throw new ArgumentException("Invalid theme");
         SaveAppearance(()=>
         {
             Config.Theme=value;
+            Config.ManufacturerColors=false;
             switch(value)
             {
+                case "amber": Config.Accent="#F4A449";Config.Accent2="#BD632B";Config.Background="#150D06";Config.Panel="#42270C";Config.Radius=2;break;
+                case "solar": Config.Accent="#E4CF39";Config.Accent2="#A48E27";Config.Background="#111205";Config.Panel="#34330A";Config.Radius=2;break;
+                case "violet": Config.Accent="#C669F0";Config.Accent2="#863ADD";Config.Background="#10061B";Config.Panel="#321343";Config.Radius=2;break;
                 case "graphite": Config.Accent="#7FC8FF";Config.Accent2="#AFA7FF";Config.Background="#0C0F13";Config.Panel="#151A20";Config.PanelOpacity=96;Config.Radius=6;Config.Glow=18;break;
-                case "tactical": Config.Accent="#68E0B0";Config.Accent2="#D8AA5B";Config.Background="#07100D";Config.Panel="#101B17";Config.PanelOpacity=94;Config.Radius=4;Config.Glow=22;break;
+                case "tactical": Config.Accent="#B3C961";Config.Accent2="#D8AA5B";Config.Background="#07100D";Config.Panel="#29351B";Config.PanelOpacity=94;Config.Radius=4;Config.Glow=22;break;
                 case "minimal": Config.Accent="#A8C7E6";Config.Accent2="#7994A8";Config.Background="#0D1117";Config.Panel="#141A20";Config.PanelOpacity=100;Config.Radius=2;Config.Glow=4;break;
-                default: Config.Accent="#20E0D0";Config.Accent2="#2B8CFF";Config.Background="#061019";Config.Panel="#0D1B25";Config.PanelOpacity=92;Config.Radius=8;Config.Glow=32;break;
+                default: Config.Accent="#00C8FA";Config.Accent2="#2B8CFF";Config.Background="#061019";Config.Panel="#063044";Config.PanelOpacity=92;Config.Radius=2;Config.Glow=32;break;
             }
         });
     }

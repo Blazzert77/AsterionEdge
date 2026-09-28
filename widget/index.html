@@ -1,52 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <title>Asterion Edge</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="icon" href="icon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-<div id="cockpit">
-  <header class="topbar">
-    <div class="brand">
-      <img src="icon.svg" alt="" />
-      <div class="brand-copy">
-        <strong>ASTERION</strong>
-        <span>EDGE / STAR CITIZEN</span>
-      </div>
-      <b class="version" id="versionBadge">v0.3.0</b>
-    </div>
-
-    <div class="tagline">VOTRE UNIVERS. PLUS PROCHE.</div>
-
-    <div class="status-strip" aria-label="État du système">
-      <div class="status-chip"><span>COMPANION</span><strong id="connection">DÉCONNECTÉ</strong></div>
-      <div class="status-chip"><span>STAR CITIZEN</span><strong id="game">ARRÊTÉ</strong></div>
-      <div class="status-chip"><span>BRANCHE</span><strong id="branchBuild">—</strong></div>
-      <div class="status-chip"><span>GAME.LOG</span><strong id="logState">—</strong></div>
-    </div>
-    <time id="clock">00:00</time>
-  </header>
-
-  <div class="workspace">
-    <aside class="rail">
-      <nav id="nav"></nav>
-      <div class="rail-foot">ASTERION<span>MFD LOCAL</span></div>
-    </aside>
-
-    <main>
-      <div id="content"></div>
-    </main>
-  </div>
-
-  <footer>
-    <span id="footerStatus">AUTO-LINK · en attente du Companion</span>
-    <span id="toast" role="status">Connexion locale automatique.</span>
-    <button id="retryButton" class="footer-action">RECONNECTER</button>
-  </footer>
-</div>
-<script src="app.js"></script>
-</body>
-</html>
+<head><title>Asterion Edge · Cockpit</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"></head>
+<body><div id="cockpit">
+<header class="topbar">
+<div id="contextSwitch" class="context-switch" aria-label="Mode du cockpit"></div>
+<div class="ship-identity"><span id="shipIcon"></span><div><strong id="shipName">ASTERION EDGE</strong><span id="shipDetail">EN ATTENTE DE SESSION</span></div></div>
+<div class="mission"><span class="eyebrow">CONTRAT ACTIF</span><strong id="missionName">Aucun contrat observé</strong><div class="mission-marks"><i></i><i></i><i></i></div></div>
+<div class="session-cell"><span class="eyebrow">LOCALISATION</span><strong id="locationName">Non observée</strong><span id="logState">GAME.LOG · —</span></div>
+<div class="session-cell shard-cell"><span class="eyebrow">SHARD</span><strong id="shardName">—</strong><span id="branchBuild">—</span></div>
+<div class="link-cell"><strong id="connection">DÉCONNECTÉ</strong><span id="game">ARRÊTÉ</span></div>
+<button id="settingsButton" class="icon-button" aria-label="Réglages" title="Personnalisation et commandes">⚙</button>
+</header>
+<div class="workspace"><main><div id="content"></div></main></div>
+<footer><div id="eventTicker" class="event-ticker"></div><span id="toast" role="status">Connexion locale automatique.</span><button id="retryButton" class="footer-action" aria-label="Reconnecter">↻</button></footer>
+<div hidden><span id="versionBadge"></span><span id="footerStatus"></span><time id="clock"></time><nav id="nav"></nav></div>
+</div><script src="app.js"></script></body></html>

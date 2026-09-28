@@ -1,3 +1,7 @@
+# 0.3.1 — Interface design.1 sur base stable
+
+Reprise du cockpit de v0.3.0-design.1 sur le moteur v0.3.0 stable. Correctifs récents conservés, rendu différé après maintien, sept palettes, personnalisation et commandes supplémentaires configurables. Voir [les notes de version](docs/release-0.3.1.md).
+
 # Asterion Edge — changelog de développement
 
 ## v0.3.0 — stable
