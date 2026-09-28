@@ -2,6 +2,8 @@
 
 ## v0.3.0 — stable
 
+- Interface graphique classique restaurée depuis la dernière base dev.2 (`632b307`) ; les correctifs techniques restent intégrés.
+
 - Widget : un maintien Éjection / Autodestruction n'est plus annulé quand un événement Game.log ou une mise à jour d'état arrive pendant le maintien.
 - Widget : les pages Combat, Systèmes et Réglages avaient des classes CSS sans style (boutons en ligne, page Réglages qui débordait) ; elles reprennent le style des panneaux MFD. Le cockpit principal est inchangé.
 - Widget : le réglage « Taille du texte » est réellement appliqué ; l'horloge s'affiche immédiatement.
