@@ -13,7 +13,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
   const page=await browser.newPage({viewport:{width:2560,height:720}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await send('context','FLIGHT');await send('theme','nebula');await send('fontScale','100');await send('density','comfortable');await send('animations','1');
   await page.goto(base);await page.getByText('CONNECTÉ',{exact:true}).waitFor();
-  assert.equal(await page.locator('#versionBadge').textContent(),'v0.3.1');
+  assert.equal(await page.locator('#versionBadge').textContent(),'v0.3.2');
   assert.match(await page.locator('#clock').textContent(),/^\d\d:\d\d$/);
   // A feed event really changes the render key while the guarded pointer is held.
   const eject=page.locator('[data-action=eject]');await eject.evaluate(el=>{window.testHeldButton=el;});

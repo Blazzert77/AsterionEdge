@@ -1,16 +1,18 @@
 {
   "version": "4.10-local-candidates",
-  "note": "No default keys assumed. IDs require an exact match in the selected player XML. Empty IDs must be assigned manually after checking current in-game controls.",
+  "note": "Command mappings include verified installed LIVE 4.10.193.11644 controls. Entries still marked candidate/manual are not verified. Unassigned game actions have no invented fallback.",
   "actions": [
     {
       "id": "master",
-      "label": "Master mode",
+      "label": "SCM / NAV",
       "page": "Flight",
       "map": "spaceship_movement",
-      "action": "v_master_mode_cycle",
+      "action": "v_master_mode_cycle_long",
       "dangerous": false,
-      "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "pressMs": 400,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500
     },
     {
       "id": "brake",
@@ -207,10 +209,12 @@
       "label": "Engines",
       "page": "Power",
       "map": "spaceship_power",
-      "action": "v_power_toggle_engine",
+      "action": "v_power_toggle_thrusters",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "shields",
@@ -220,7 +224,9 @@
       "action": "v_power_toggle_shields",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "weapons",
@@ -230,7 +236,9 @@
       "action": "v_power_toggle_weapons",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "coolers",
@@ -250,47 +258,57 @@
       "action": "v_power_toggle",
       "dangerous": true,
       "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "pw",
-      "label": "Power → weapons",
+      "label": "Allocation armes au maximum",
       "page": "Power",
       "map": "spaceship_power",
-      "action": "v_power_focus_weapons",
+      "action": "v_engineering_assignment_weapons_max",
       "dangerous": false,
-      "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "pressMs": 400,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500
     },
     {
       "id": "pt",
-      "label": "Power → thrusters",
+      "label": "Allocation moteurs au maximum",
       "page": "Power",
       "map": "spaceship_power",
-      "action": "v_power_focus_engines",
+      "action": "v_engineering_assignment_engine_max",
       "dangerous": false,
-      "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "pressMs": 400,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500
     },
     {
       "id": "ps",
-      "label": "Power → shields",
+      "label": "Allocation boucliers au maximum",
       "page": "Power",
       "map": "spaceship_power",
-      "action": "v_power_focus_shields",
+      "action": "v_engineering_assignment_shields_max",
       "dangerous": false,
-      "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "pressMs": 400,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500
     },
     {
       "id": "balance",
       "label": "Balance power",
       "page": "Power",
       "map": "spaceship_power",
-      "action": "v_power_reset_focus",
+      "action": "v_engineering_assignment_reset",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "friendly",
@@ -474,13 +492,15 @@
     },
     {
       "id": "doors",
-      "label": "Unlock doors",
+      "label": "Ouvrir / fermer les portes",
       "page": "Systems",
       "map": "spaceship_general",
-      "action": "v_unlock_all_doors",
+      "action": "v_toggle_all_doors",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Observed in local 4.10 profile"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "camera",
@@ -516,11 +536,13 @@
       "id": "eject",
       "label": "Eject",
       "page": "Systems",
-      "map": "spaceship_general",
+      "map": "seat_general",
       "action": "v_eject",
       "dangerous": true,
       "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "destruct",
@@ -529,8 +551,10 @@
       "map": "spaceship_general",
       "action": "v_self_destruct",
       "dangerous": true,
-      "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "pressMs": 650,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 650,
+      "maximumPressMs": 1500
     },
     {
       "id": "sf",
@@ -636,91 +660,109 @@
       "id": "startup",
       "label": "Démarrage du vaisseau",
       "page": "Power",
-      "map": "",
-      "action": "",
+      "map": "spaceship_general",
+      "action": "v_flightready",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "weaponsUp",
       "label": "Armes : puissance +",
       "page": "Power",
-      "map": "",
-      "action": "",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_increase",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "weaponsDown",
       "label": "Armes : puissance −",
       "page": "Power",
-      "map": "",
-      "action": "",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_decrease",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "enginesUp",
       "label": "Moteurs : puissance +",
       "page": "Power",
-      "map": "",
-      "action": "",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_increase",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "enginesDown",
       "label": "Moteurs : puissance −",
       "page": "Power",
-      "map": "",
-      "action": "",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_decrease",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "shieldsUp",
       "label": "Boucliers : puissance +",
       "page": "Power",
-      "map": "",
-      "action": "",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_increase",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "shieldsDown",
       "label": "Boucliers : puissance −",
       "page": "Power",
-      "map": "",
-      "action": "",
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_decrease",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "coolersUp",
-      "label": "Refroidissement +",
+      "label": "Débit de refroidissement +",
       "page": "Power",
-      "map": "",
-      "action": "",
+      "map": "spaceship_general",
+      "action": "v_cooler_throttle_up",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "coolersDown",
-      "label": "Refroidissement −",
+      "label": "Débit de refroidissement −",
       "page": "Power",
-      "map": "",
-      "action": "",
+      "map": "spaceship_general",
+      "action": "v_cooler_throttle_down",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "proximity",
@@ -1051,6 +1093,126 @@
       "dangerous": false,
       "pressMs": 90,
       "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
+    },
+    {
+      "id": "doorsOpen",
+      "label": "Ouvrir les portes",
+      "page": "Systems",
+      "dangerous": false,
+      "map": "spaceship_general",
+      "action": "v_open_all_doors",
+      "pressMs": 90,
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "doorsClose",
+      "label": "Fermer les portes",
+      "page": "Systems",
+      "dangerous": false,
+      "map": "spaceship_general",
+      "action": "v_close_all_doors",
+      "pressMs": 90,
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "doorunlock",
+      "label": "Déverrouiller les portes",
+      "page": "Systems",
+      "dangerous": false,
+      "map": "spaceship_general",
+      "action": "v_unlock_all_doors",
+      "pressMs": 90,
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "doorlock",
+      "label": "Verrouiller les portes",
+      "page": "Systems",
+      "dangerous": false,
+      "map": "spaceship_general",
+      "action": "v_lock_all_doors",
+      "pressMs": 90,
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "weaponsMax",
+      "label": "Armes au maximum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_max",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "weaponsMin",
+      "label": "Armes au minimum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_min",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "enginesMax",
+      "label": "Moteurs au maximum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_max",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "enginesMin",
+      "label": "Moteurs au minimum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_min",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "shieldsMax",
+      "label": "Boucliers au maximum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_max",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "shieldsMin",
+      "label": "Boucliers au minimum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_min",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
     }
   ]
 }

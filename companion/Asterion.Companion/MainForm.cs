@@ -111,3 +111,4 @@ public sealed class MainForm : Form
         form.Controls.Add(grid);form.Controls.Add(help);form.Controls.Add(save);form.ShowDialog();engine.Rescan();
     }
 }
+

@@ -46,7 +46,11 @@ public static class WindowsInput
             if(SendInput((uint)down.Count,down.ToArray(),Marshal.SizeOf<Input>())!=down.Count) throw new InvalidOperationException("Windows refused input (focus or privilege level)");
             // Interrupt long presses when focus changes; always release all keys in finally.
             long end=Environment.TickCount64+Math.Clamp(ms,30,1500);
-            while(Environment.TickCount64<end && ForegroundName().Equals("StarCitizen",StringComparison.OrdinalIgnoreCase)) await Task.Delay(15);
+            while(Environment.TickCount64<end)
+            {
+                if(!ForegroundName().Equals("StarCitizen",StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("Commande interrompue : Star Citizen a perdu le focus");
+                await Task.Delay(15);
+            }
         }
         finally { SendInput((uint)up.Count,up.ToArray(),Marshal.SizeOf<Input>()); }
     }

@@ -3,7 +3,7 @@ using System.Text.Json;
 using Asterion.Core;
 namespace Asterion.Companion;
 
-public record ActionSpec(string Id,string Label,string Page,string Map,string Action,bool Dangerous,int PressMs,string Evidence);
+public record ActionSpec(string Id,string Label,string Page,string Map,string Action,bool Dangerous,int PressMs,string Evidence,int MinimumPressMs=30,int MaximumPressMs=1500);
 public record Catalog(string Version,string Note,List<ActionSpec> Actions);
 public record ManualBinding(string Input,int PressMs = 90);
 public record DefaultBindingSpec(string Id,string Map,string Action,string Input,string Evidence);
@@ -41,6 +41,7 @@ public sealed class Config
     public bool RestoreFocusFromIcue { get; set; } = true;
     public bool DebugLogging { get; set; }
     public Dictionary<string,ManualBinding> Overrides { get; set; } = [];
+    public int CommandSchema { get; set; }
     public List<LogRule> LogRules { get; set; } = [];
     public static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web) { WriteIndented=true, Converters={ new System.Text.Json.Serialization.JsonStringEnumConverter() } };
     public static string DataDir { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"AsterionEdge");
@@ -60,6 +61,12 @@ public sealed class Config
         c.Overrides??=[]; c.LogRules??=[];
         c.LogRules.RemoveAll(r=>r==null||r.Pattern==null||r.LocalActor==null);
         foreach(var key in c.Overrides.Where(o=>o.Value?.Input==null).Select(o=>o.Key).ToList()) c.Overrides.Remove(key);
+        // Before schema 2, "doors" meant unlocking, not opening. Preserve that shortcut under its actual function.
+        if(c.CommandSchema<2)
+        {
+            if(c.Overrides.Remove("doors",out var oldDoorBinding))c.Overrides.TryAdd("doorunlock",oldDoorBinding);
+            c.CommandSchema=2;
+        }
         if(!new[]{"LIVE","PTU","EPTU"}.Contains(c.Branch,StringComparer.OrdinalIgnoreCase)) c.Branch="LIVE"; else c.Branch=c.Branch.ToUpperInvariant();
         c.Port=Math.Clamp(c.Port,1024,65535); c.HoldDuration=Math.Clamp(c.HoldDuration,1500,3000);
         if((c.Token?.Length??0)<32) c.Token=Convert.ToHexString(RandomNumberGenerator.GetBytes(24));

@@ -10,3 +10,4 @@ the exact x64 dotnet executable path for restore/test/publish.
 This fixes the error:
   No .NET SDKs were found.
   Restore failed
+

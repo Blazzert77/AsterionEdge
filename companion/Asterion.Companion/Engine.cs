@@ -11,7 +11,7 @@ public sealed class Engine : IDisposable
     public readonly object Gate=new();
     public readonly List<ActionSpec> Actions;
     readonly Dictionary<string,DefaultBindingSpec> defaultBindings;
-    public const string CurrentVersion = "0.3.1";
+    public const string CurrentVersion = "0.3.2";
     readonly ContextMachine machine=new();
     readonly LogTail tail=new();
     readonly SemaphoreSlim actionLock=new(1,1);
@@ -92,7 +92,7 @@ public sealed class Engine : IDisposable
     public (string Input,int Press,string Source) Resolve(ActionSpec action)
     {
         if(Config.Overrides.TryGetValue(action.Id,out var manual)&&KeyChord.TryParse(manual.Input,out _))
-            return(manual.Input,Math.Clamp(manual.PressMs,30,1500),"MANUEL");
+            return(manual.Input,Math.Clamp(manual.PressMs,action.MinimumPressMs,action.MaximumPressMs),"MANUEL");
 
         var matches=bindings.Where(b=>string.Equals(b.Map,action.Map,StringComparison.OrdinalIgnoreCase)
                                       && string.Equals(b.Action,action.Action,StringComparison.OrdinalIgnoreCase)).ToArray();
@@ -102,7 +102,7 @@ public sealed class Engine : IDisposable
         if(keyboard.Length>1)return("",0,"BINDING CLAVIER AMBIGU");
         // The player's profile overrides the keyboard slot (cleared with "kb1_ " or set to a multi-tap/hold variant):
         // sending the 4.10 default key here would trigger whatever the player bound to that key instead.
-        var keyboardSlot=matches.Where(b=>b.Input.TrimStart().StartsWith("kb1_",StringComparison.OrdinalIgnoreCase)).ToArray();
+        var keyboardSlot=matches.Where(b=>string.IsNullOrWhiteSpace(b.Input)||b.Input.TrimStart().StartsWith("kb1_",StringComparison.OrdinalIgnoreCase)).ToArray();
         if(keyboardSlot.Length>0)
             return("",0,keyboardSlot.Any(b=>b.Status=="UNSUPPORTED ACTIVATION")?"ACTIVATION NON SUPPORTÉE":keyboardSlot.All(b=>b.Status=="UNBOUND")?"DÉLIÉ DANS LE PROFIL":"TOUCHE NON SUPPORTÉE");
 
@@ -124,7 +124,7 @@ public sealed class Engine : IDisposable
             economy=new { balance=AuecBalance,sessionEarnings=SessionEarnings,sessionCashflow=SessionCashflow,mission=ActiveMission,source=(SessionEarnings.HasValue||SessionCashflow.HasValue)?"GAME.LOG":"UNAVAILABLE",note="Flux observé uniquement — pas un solde ni une comptabilité complète" },
             update=new { checkedRemote=Update.Checked,available=Update.Available,current=Update.CurrentVersion,latest=Update.LatestVersion,url=Update.Url,error=Update.Error },
             bindingCount=bindings.Count, defaultBindingCount=defaultBindings.Count, bindingError=BindingError,feed=feed.ToArray(),
-            actions=Actions.Select(a=>{ var b=Resolve(a);return new {a.Id,a.Label,a.Page,a.Dangerous,a.Evidence,bound=b.Input!="",input=b.Input,source=b.Source,pressMs=b.Press,stateKnown=false};}).ToArray()
+            actions=Actions.Select(a=>{ var b=Resolve(a);return new {a.Id,a.Label,a.Page,a.Dangerous,a.Evidence,a.MinimumPressMs,a.MaximumPressMs,bound=b.Input!="",input=b.Input,source=b.Source,pressMs=b.Press,stateKnown=false};}).ToArray()
         };
     }
     string Accent()

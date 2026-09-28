@@ -160,3 +160,4 @@ public sealed class LogTail : IDisposable
     }
     public void Dispose()=>watcher?.Dispose();
 }
+

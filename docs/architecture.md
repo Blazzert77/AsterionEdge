@@ -52,3 +52,4 @@ La clé n’isole pas les applications malveillantes exécutées sous le même c
 ## Déploiement
 
 Distribution autonome Windows x64 incluant .NET 10. Installateur Inno Setup par utilisateur avec désinstallation et raccourcis ; démarrage Windows désactivé par défaut. L’app ne modifie jamais un fichier de jeu. La configuration et les logs restent locaux et sont conservés à la désinstallation.
+

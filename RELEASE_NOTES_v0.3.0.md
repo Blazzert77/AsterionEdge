@@ -28,3 +28,4 @@ Version stable d’Asterion Edge pour le CORSAIR XENEON EDGE, avec l’interface
 - La CI GitHub Windows compile ensuite le Companion, le widget `.icuewidget` et l’installateur `.exe` avant publication.
 
 Pour le détail technique, voir `CHANGELOG.md`.
+

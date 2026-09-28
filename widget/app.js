@@ -1,7 +1,7 @@
 'use strict';
 (() => {
   const $=id=>document.getElementById(id);
-  const VERSION='0.3.1';
+  const VERSION='0.3.2';
   const DEV='';
   const pages={Home:['COCKPIT','⌂'],Combat:['COMBAT','◎'],Systems:['SYSTÈMES','⚙'],FPS:['À PIED','♙'],Settings:['RÉGLAGES','≡'],Bindings:['COMMANDES','≡']};
   const actionLabels={
@@ -9,7 +9,7 @@
     lock:'Verrouiller cible',hostile:'Hostile suivante',attacker:'Attaquant suivant',missile:'Mode missile',arm:'Armer missile',decoy:'Leurre',noise:'Noise',group:'Groupe armes',
     engines:'Moteurs',shields:'Boucliers',weapons:'Armes',coolers:'Refroidisseurs',power:'Alimentation',pw:'Priorité armes',pt:'Priorité moteurs',ps:'Priorité boucliers',balance:'Équilibrer énergie',
     friendly:'Alliée suivante',subtarget:'Sous-composant',pin:'Épingler cible',scan:'Scan',ping:'Ping',helmet:'Casque',flashlight:'Lampe',wipe:'Visière',mobiglas:'mobiGlas',inventory:'Inventaire',interact:'Interaction',heal:'Soin',
-    starmap:'Carte stellaire',doors:'Portes',camera:'Caméra externe',headtrack:'Head tracking',mfd:'MFD suivant',eject:'Éjection',destruct:'Autodestruction',
+    starmap:'Carte stellaire',doors:'Ouvrir / fermer les portes',camera:'Caméra externe',headtrack:'Head tracking',mfd:'MFD suivant',eject:'Éjection',destruct:'Autodestruction',
     sf:'Bouclier avant',sr:'Bouclier arrière',sl:'Bouclier gauche',sright:'Bouclier droit',stop:'Bouclier haut',sbottom:'Bouclier bas',sreset:'Équilibrer boucliers',salute:'Salut',wave:'Faire signe',respect:'Respect'
   };
   const iconPaths={
@@ -55,10 +55,10 @@
   const quickFoot=['mobiglas','inventory','flashlight','helmet','interact','heal','starmap'];
   const systemGroups={
     'PILOTAGE':['brake','limiter','gsafe','esp','autoland','cruise','decoupled','master','gear','vtol','landing'],
-    'ÉNERGIE':['power','engines','weapons','shields','coolers','pw','pt','ps','balance'],
-    'BOUCLIERS':['sf','sr','sl','sright','stop','sbottom','sreset'],
+    'ÉNERGIE':['power','engines','weapons','shields','coolers','coolersUp','coolersDown','pw','pt','ps','balance'],
+    'RÉPARTITION':['weaponsUp','weaponsDown','weaponsMin','weaponsMax','enginesUp','enginesDown','enginesMin','enginesMax','shieldsUp','shieldsDown','shieldsMin','shieldsMax','balance'],
     'PERSONNEL':['mobiglas','inventory','flashlight','helmet','helmetstow','wipe','interact','heal','primary','secondary','sidearm','reload','firemode','freecam','salute','wave','respect'],
-    'SYSTÈMES':['lights','doors','camera','headtrack','mfd','mobiglas','starmap','scan','ping','eject','destruct']
+    'SYSTÈMES':['doorsOpen','doorsClose','doorunlock','doorlock','lights','doors','camera','headtrack','mfd','mobiglas','starmap','scan','ping','eject','destruct']
   };
   const combatGroups={
     'CIBLAGE':['lock','hostile','attacker','friendly','subtarget','pin'],
@@ -66,7 +66,7 @@
     'DÉFENSE':['decoy','noise'],
     'CAPTEURS':['scan','ping']
   };
-  let powerTab='power',targetTab='target';
+  let powerTab='power',targetTab='target',bindingFilter='';
   let page='Home',state=null,ws=null,port=(['127.0.0.1','localhost'].includes(location.hostname)&&location.port?Number(location.port):32147),retry=null,backoff=800,connected=false,lastContext='',hold=null,ping=null,lastMessage=0,renderKey='',renderDeferred=false;
   const pending=new Map();
   $('versionBadge').textContent='v'+VERSION+(DEV?' · '+DEV:'');
@@ -135,7 +135,7 @@
   }
   function action(id,label,cls='mfd-action'){
     const found=(state?.actions||[]).find(a=>a.id===id);const a=found||{id,label:label||actionLabels[id]||id,bound:false,source:'NON LIÉ'};
-    const b=actionButton(a,cls);if(label)b.querySelector('b').textContent=label;return b;
+    const b=actionButton(a,cls);if(label)b.querySelector('b').textContent=label;if(id==='doors'&&connected&&!state?.simulation&&!a.bound){b.disabled=false;b.classList.add('configure-action');b.querySelector('small').textContent='CONFIGURER';b.title='Aucune touche d’ouverture affectée : cliquer pour configurer';b.onclick=()=>{bindingFilter='portes';page='Bindings';renderKey='';render();};}return b;
   }
   function panel(title,sub,extra=''){
     const p=document.createElement('article');p.className='mfd-panel '+extra;
@@ -149,9 +149,9 @@
     wrap.append(powerPanel(),flightPanel(),systemsPanel(),targetPanel(),dangerRail());c.append(wrap);
   }
   function powerPanel(){
-    const p=panel(powerTab==='power'?'POWER':'SHIELDS','','power-panel');p.querySelector('.mfd-head small').replaceWith(tabButtons([['power','POWER'],['shields','SHIELDS']],powerTab,v=>powerTab=v));const body=p.querySelector('.panel-body');
-    if(powerTab==='shields'){const diagram=document.createElement('div');diagram.className='shield-diagram';for(const [id,label] of [['sf','AVANT'],['sl','GAUCHE'],['sreset','RESET'],['sright','DROITE'],['sr','ARRIÈRE'],['stop','HAUT'],['sbottom','BAS']])diagram.append(action(id,label,'shield-action'));body.append(diagram);return p;}
-    const controls=document.createElement('div');controls.className='power-controls';for(const [id,focus,label] of [['weapons','pw','WPN'],['engines','pt','THR'],['shields','ps','SHLD'],['coolers','coolers','COOL']]){const col=document.createElement('div');col.className='power-column';col.append(action(id+'Up','+','mfd-action power-arrow'),action(id+'Down','−','mfd-action power-arrow'),action(focus,label));controls.append(col);}body.append(controls);
+    const p=panel(powerTab==='power'?'POWER':'RÉPARTITION','','power-panel');p.querySelector('.mfd-head small').replaceWith(tabButtons([['power','POWER'],['allocation','POINTS']],powerTab,v=>powerTab=v));const body=p.querySelector('.panel-body');
+    if(powerTab==='allocation'){for(const [id,label] of [['weapons','ARMES'],['engines','MOTEURS'],['shields','BOUCLIERS']])body.append(section(label,[[id+'Down','−1'],[id+'Up','+1'],[id+'Min','MIN'],[id+'Max','MAX']],'allocation-grid'));const note=document.createElement('p');note.className='power-help';note.textContent='Ordres de répartition · le total réel des points n’est pas télémétré.';body.append(note);return p;}
+    const controls=document.createElement('div');controls.className='power-controls';for(const [id,focus,label] of [['weapons','pw','WPN MAX'],['engines','pt','THR MAX'],['shields','ps','SHLD MAX'],['coolers','coolers','COOL']]){const col=document.createElement('div');col.className='power-column';col.append(action(id+'Up','+','mfd-action power-arrow'),action(id+'Down','−','mfd-action power-arrow'),action(focus,label));controls.append(col);}body.append(controls);const note=document.createElement('p');note.className='power-help';note.textContent='Flèches : ±1 point · COOL : débit, raccourcis à lier';body.append(note);
     const start=action('startup','DÉMARRAGE VAISSEAU','mfd-action startup');start.querySelector('b').innerHTML='DÉMARRAGE<br>VAISSEAU<small>PRÉPARATION AU VOL</small>';body.append(start);
     const bottom=document.createElement('div');bottom.className='power-bottom';bottom.append(action('power','PWR'),action('balance','RESET'));body.append(bottom);return p;
   }
@@ -182,17 +182,18 @@
   function toggle(label,on,type){const b=document.createElement('button');b.className='toggle '+(on?'on':'');b.textContent=`${label} : ${on?'ON':'OFF'}`;b.onclick=()=>send(type,on?'0':'1').then(()=>toast(`${label} mis à jour.`)).catch(e=>toast(e.message));return b;}
   function bindingsPage(c){
     c.append(pageHead('COMMANDES & RACCOURCIS','Associez les commandes à vos raccourcis en jeu. Exemple : kb1_lalt+n. Aucun raccourci n’est inventé.',false));
-    const search=document.createElement('input');search.type='text';search.className='search-input';search.placeholder='Rechercher une commande…';search.setAttribute('aria-label','Rechercher une commande');c.append(search);
+    c.append(notice('PORTES : déverrouiller ne les ouvre pas. Affectez une touche à l’ouverture/fermeture de toutes les portes dans Star Citizen, puis renseignez la même ici (kb1_…) ou exportez votre profil. Aucun raccourci par défaut n’existe pour cette action.'));
+    const search=document.createElement('input');search.type='text';search.className='search-input';search.placeholder='Rechercher une commande…';search.setAttribute('aria-label','Rechercher une commande');search.value=bindingFilter;c.append(search);
     const list=document.createElement('div');list.className='binding-list';c.append(list);
     function draw(){list.replaceChildren();for(const a of (state?.actions||[]).filter(a=>(a.label+' '+(actionLabels[a.id]||'')+' '+a.page).toLowerCase().includes(search.value.toLowerCase()))){
       const row=document.createElement('form');row.className='binding-row';row.dataset.binding=a.id;
       const name=document.createElement('strong');name.textContent=actionLabels[a.id]||a.label;const source=document.createElement('span');source.textContent=a.source;
       const lab=document.createElement('label');lab.textContent='Raccourci clavier';const input=document.createElement('input');input.type='text';input.value=a.input||'';input.placeholder='kb1_lalt+n';input.setAttribute('aria-label','Raccourci '+name.textContent);lab.append(input);
-      const duration=document.createElement('label');duration.textContent='Durée (ms)';const ms=document.createElement('input');ms.type='number';ms.min=30;ms.max=1500;ms.value=a.pressMs||90;duration.append(ms);
+      const duration=document.createElement('label');duration.textContent='Durée (ms)';const ms=document.createElement('input');ms.type='number';ms.min=a.minimumPressMs||30;ms.max=a.maximumPressMs||1500;ms.value=a.pressMs||Math.max(90,a.minimumPressMs||30);ms.title='Plage compatible : '+ms.min+'–'+ms.max+' ms';duration.append(ms);
       const save=document.createElement('button');save.type='submit';save.textContent='ENREGISTRER';save.disabled=!connected;const reset=document.createElement('button');reset.type='button';reset.textContent='RÉINITIALISER';reset.disabled=!connected;
       row.onsubmit=e=>{e.preventDefault();send('binding',JSON.stringify({id:a.id,input:input.value.trim(),pressMs:Number(ms.value)})).then(()=>toast('Raccourci enregistré : '+name.textContent)).catch(e=>toast(e.message));};
       reset.onclick=()=>send('binding',JSON.stringify({id:a.id,input:null})).then(()=>{renderKey='';render();toast('Raccourci réinitialisé.');}).catch(e=>toast(e.message));row.append(name,source,lab,duration,save,reset);list.append(row);
-    }}search.oninput=draw;draw();
+    }}search.oninput=()=>{bindingFilter=search.value;draw();};draw();
   }
   function notice(text){const n=document.createElement('div');n.className='notice';n.textContent=text;return n;}
   function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));}

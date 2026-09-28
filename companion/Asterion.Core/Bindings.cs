@@ -58,6 +58,7 @@ public record KeyChord(ushort[] ScanCodes, int MouseButton = 0)
             else return false;
         }
         if (codes.Distinct().Count() != codes.Count) return false;
-        chord = new(codes.ToArray(), mouse); return true;
+        // SC exports chords such as f6+lalt; modifiers must be pressed before the action key.
+        chord = new(codes.OrderBy(c=>c is 29 or 42 or 54 or 56 or 0x11d or 0x138 ? 0 : 1).ToArray(), mouse); return true;
     }
 }

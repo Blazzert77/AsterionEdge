@@ -1,3 +1,7 @@
+# 0.3.2 — Commandes de vol
+
+Autodestruction et SCM/NAV avec les durées attendues, allocation d’énergie actuelle, séparation ouverture/verrouillage des portes, ordre des modificateurs et protection des durées personnalisées. Tests du résolveur réel ajoutés à la compilation. Voir [les notes](docs/release-0.3.2.md).
+
 # 0.3.1 — Interface design.1 sur base stable
 
 Reprise du cockpit de v0.3.0-design.1 sur le moteur v0.3.0 stable. Correctifs récents conservés, rendu différé après maintien, sept palettes, personnalisation et commandes supplémentaires configurables. Voir [les notes de version](docs/release-0.3.1.md).

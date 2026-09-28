@@ -30,3 +30,4 @@ Le widget utilise `ws://127.0.0.1:32147/events`. Le Companion n'écoute que sur 
 - **NON LIÉ** : exporter les bindings ou définir un override manuel.
 - **Contexte inconnu** : utiliser temporairement À pied / Vol.
 - **Windows refused input** : vérifier que Star Citizen et Asterion utilisent un niveau de privilèges compatible.
+

@@ -43,3 +43,4 @@ En mode auto-link ces routes ne demandent pas de bearer token, mais restent inac
 ## Modèle de sécurité
 
 La suppression du pairing manuel est un choix UX. Un processus local malveillant pourrait contacter le service loopback ; Asterion ne prétend pas protéger contre un programme déjà exécuté sur le PC de l’utilisateur. Les garde-fous importants restent : catalogue d’actions fermé, maintien côté serveur pour les actions dangereuses, Star Citizen requis au premier plan pour l’envoi réel, aucun shell/lecture mémoire/injection.
+
