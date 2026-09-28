@@ -11,7 +11,7 @@ public sealed class Engine : IDisposable
     public readonly object Gate=new();
     public readonly List<ActionSpec> Actions;
     readonly Dictionary<string,DefaultBindingSpec> defaultBindings;
-    public const string CurrentVersion = "0.3.0-dev.3";
+    public const string CurrentVersion = "0.3.0";
     readonly ContextMachine machine=new();
     readonly LogTail tail=new();
     readonly SemaphoreSlim actionLock=new(1,1);
@@ -100,6 +100,11 @@ public sealed class Engine : IDisposable
                             .Select(b=>b.Input).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
         if(keyboard.Length==1)return(keyboard[0],action.PressMs,"PROFIL JOUEUR");
         if(keyboard.Length>1)return("",0,"BINDING CLAVIER AMBIGU");
+        // The player's profile overrides the keyboard slot (cleared with "kb1_ " or set to a multi-tap/hold variant):
+        // sending the 4.10 default key here would trigger whatever the player bound to that key instead.
+        var keyboardSlot=matches.Where(b=>b.Input.TrimStart().StartsWith("kb1_",StringComparison.OrdinalIgnoreCase)).ToArray();
+        if(keyboardSlot.Length>0)
+            return("",0,keyboardSlot.Any(b=>b.Status=="UNSUPPORTED ACTIVATION")?"ACTIVATION NON SUPPORTÉE":keyboardSlot.All(b=>b.Status=="UNBOUND")?"DÉLIÉ DANS LE PROFIL":"TOUCHE NON SUPPORTÉE");
 
         if(defaultBindings.TryGetValue(action.Id,out var fallback)
            && string.Equals(fallback.Map,action.Map,StringComparison.OrdinalIgnoreCase)
@@ -136,7 +141,14 @@ public sealed class Engine : IDisposable
     {
         lock(Gate)
         {
-            machine.Force(context=="AUTO"?null:Enum.Parse<Asterion.Core.Context>(context??"UNKNOWN"));
+            Asterion.Core.Context? forced=null;
+            if(context!="AUTO")
+            {
+                if(string.IsNullOrWhiteSpace(context)||!Enum.TryParse<Asterion.Core.Context>(context,false,out var parsed)||!Enum.IsDefined(parsed)||context.Any(char.IsDigit))
+                    throw new ArgumentException("Unknown context");
+                forced=parsed;
+            }
+            machine.Force(forced);
             Add("Context: "+machine.Current,"MANUAL");
         }
         Changed?.Invoke();
@@ -292,8 +304,9 @@ public sealed class Engine : IDisposable
                     Changed?.Invoke();
                 }
             }
-            catch(Exception e) when(e is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception) {Log.Write("Monitor: "+e.GetType().Name);}
-            await Task.Delay(1000,cancel);
+            catch(OperationCanceledException) when(cancel.IsCancellationRequested) { break; }
+            catch(Exception e) {Log.Write("Monitor: "+e.GetType().Name+" "+e.Message);}
+            try { await Task.Delay(1000,cancel); } catch(OperationCanceledException) { break; }
         }
     }
     public List<Binding> AllBindings(){lock(Gate)return bindings.ToList();}

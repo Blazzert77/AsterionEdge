@@ -8,7 +8,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
  try{
   const page=await browser.newPage({viewport:{width:2536,height:696}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base);await page.getByText('CONNECTÉ',{exact:true}).first().waitFor();
-  assert.equal(await page.locator('#versionBadge').innerText(),'v0.3.0 · DEV.3');
+  assert.equal(await page.locator('#versionBadge').innerText(),'v0.3.0');
   await page.getByRole('button',{name:'VOL',exact:true}).click();
   await page.getByRole('heading',{name:'MFD PRINCIPAL',exact:true}).waitFor();
   assert((await page.locator('.mfd-action').count())>=20);
@@ -25,6 +25,6 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
   await page.getByRole('heading',{name:'PERSONNALISATION',exact:true}).waitFor();
   assert.equal(await page.locator('input[type=color]').count(),4);
   assert.deepEqual(errors,[]);
-  console.log('PASS: dev.3 MFD layout, shield strip, guarded danger actions, contextual foot page');
+  console.log('PASS: stable v0.3.0 MFD layout, shield strip, guarded danger actions, contextual foot page');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

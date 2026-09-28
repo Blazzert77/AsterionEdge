@@ -110,7 +110,7 @@ public sealed class Api(Engine engine)
                         case "manufacturerColors": engine.SetManufacturerColors(id=="1"||id.Equals("true",StringComparison.OrdinalIgnoreCase));break;
                         case "openUpdate": engine.OpenUpdate();break;
                         case "test": engine.TestSignal();break;
-                        case "ping":break;
+                        case "ping":queue.Writer.TryWrite(new{type="pong"});break;
                         default:throw new ArgumentException("Unknown message type");
                     }
                     if(requestId!="")queue.Writer.TryWrite(new{type="ack",requestId,ok=true});

@@ -20,9 +20,15 @@ public static class Bindings
             bool complex = bind.Attributes().Any(a => a.Name.LocalName != "input" && a.Value != "0")
                 || action.Attributes().Any(a=>a.Name.LocalName!="name" && a.Value!="0");
             result.Add(new((string?)map.Attribute("name") ?? "", (string?)action.Attribute("name") ?? "", input,
-                complex ? "UNSUPPORTED ACTIVATION" : KeyChord.TryParse(input, out _) ? "BOUND" : input == "" ? "UNBOUND" : "UNSUPPORTED INPUT"));
+                IsExplicitUnbind(input) ? "UNBOUND" : complex ? "UNSUPPORTED ACTIVATION" : KeyChord.TryParse(input, out _) ? "BOUND" : "UNSUPPORTED INPUT"));
         }
         return result;
+    }
+    // Star Citizen writes a cleared binding as the bare device prefix, e.g. input="kb1_ " or input="js1_ ".
+    public static bool IsExplicitUnbind(string input)
+    {
+        string trimmed = input.Trim();
+        return trimmed == "" || System.Text.RegularExpressions.Regex.IsMatch(trimmed, @"^[a-z]{2}\d+_$", System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
     }
 }
 
@@ -47,7 +53,7 @@ public record KeyChord(ushort[] ScanCodes, int MouseButton = 0)
         var codes = new List<ushort>(); int mouse = 0;
         foreach (string part in parts)
         {
-            if (part is "mouse4" or "mouse5") { if (parts.Length != 1) return false; mouse = part == "mouse4" ? 1 : 2; }
+            if (part.Equals("mouse4", StringComparison.OrdinalIgnoreCase) || part.Equals("mouse5", StringComparison.OrdinalIgnoreCase)) { if (parts.Length != 1) return false; mouse = part.Equals("mouse4", StringComparison.OrdinalIgnoreCase) ? 1 : 2; }
             else if (Keys.TryGetValue(part, out var code)) codes.Add(code);
             else return false;
         }

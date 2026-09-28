@@ -1,4 +1,4 @@
-# Asterion Edge 0.3.0-dev.3
+# Asterion Edge 0.3.0
 
 Asterion Edge est un cockpit tactile local pour **CORSAIR XENEON EDGE** et **Star Citizen**.
 

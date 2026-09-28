@@ -1,6 +1,21 @@
 # Asterion Edge — changelog de développement
 
-## v0.3.0-dev.3 — MFD-first redesign
+## v0.3.0 — stable
+
+- Widget : un maintien Éjection / Autodestruction n'est plus annulé quand un événement Game.log ou une mise à jour d'état arrive pendant le maintien.
+- Widget : les pages Combat, Systèmes et Réglages avaient des classes CSS sans style (boutons en ligne, page Réglages qui débordait) ; elles reprennent le style des panneaux MFD. Le cockpit principal est inchangé.
+- Widget : le réglage « Taille du texte » est réellement appliqué ; l'horloge s'affiche immédiatement.
+- Companion : une touche explicitement déliée dans le profil (`kb1_ `) n'est plus remplacée par la touche par défaut 4.10.
+- Companion : les boutons « Thème Obsidienne » et « Thème Nuit bleue » envoyaient des thèmes inexistants (erreur « Invalid theme »).
+- Companion : l'éditeur de commandes n'attribue plus les overrides à la mauvaise action après un tri de colonne.
+- Companion : nom du mutex d'instance unique corrigé (`Local\AsterionEdgeCompanion`).
+- Companion : une erreur imprévue n'arrête plus définitivement la surveillance du jeu / Game.log.
+- Companion : un `config.json` illisible ou contenant des `null` n'empêche plus le démarrage (copie en `config.json.corrupt`).
+- Companion : détection d'un nouveau Game.log par son en-tête (plus fiable que la date de création) ; un Game.log créé après le démarrage est lu depuis le début.
+- Companion : la vérification des mises à jour compare correctement les préversions (0.3.0 > 0.3.0-dev.3).
+- Companion : réponse `pong` au heartbeat du widget ; contexte manuel invalide refusé.
+
+## v0.3.0 — base MFD-first
 
 - Refonte visuelle basée sur une logique de MFD tactile : gros boutons, groupes Power / Flight / Ship Systems / Target.
 - Les commandes principales sont visibles immédiatement au lieu d'être enfouies dans de petites tuiles.
@@ -10,6 +25,6 @@
 - Les commandes non liées restent visibles mais désactivées avec leur statut, au lieu de disparaître.
 - Ajout d'un emplacement Refroidisseurs en binding manuel tant qu'aucun action ID actuel n'est suffisamment vérifié.
 - Barre de session persistante : vaisseau si connu, localisation, shard, branche/build.
-- Version affichée : `v0.3.0 · DEV.3`.
+- Version affichée : `v0.3.0`.
 - Personnalisation avancée conservée.
 - Aucun faux état de bouclier/puissance n'est affiché : Asterion envoie des commandes, il ne prétend pas connaître leur état sans télémétrie fiable.

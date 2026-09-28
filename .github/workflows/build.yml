@@ -2,7 +2,7 @@ name: Validate and build Asterion Edge
 
 on:
   push:
-    branches: [develop, main]
+    branches: [develop, main, release/v0.3.0]
   workflow_dispatch:
 
 permissions:
@@ -79,3 +79,21 @@ jobs:
           }
 
           gh release create $tag release/AsterionEdge-Setup-*.exe asterion-star-citizen-cockpit-*.icuewidget --target "${{ github.sha }}" --title "Asterion Edge $tag" --notes-file release-notes.md --prerelease
+
+
+      - name: Publish GitHub stable release
+        if: github.ref == 'refs/heads/release/v0.3.0'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $manifest = Get-Content widget/manifest.json | ConvertFrom-Json
+          $version = $manifest.version
+          $tag = "v$version"
+
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release delete $tag --yes --cleanup-tag
+          }
+
+          gh release create $tag release/AsterionEdge-Setup-*.exe asterion-star-citizen-cockpit-*.icuewidget --target "${{ github.sha }}" --title "Asterion Edge $tag — Stable" --notes-file RELEASE_NOTES_v0.3.0.md

@@ -97,28 +97,59 @@ public sealed class HoldGate(Func<long>? clock = null)
 
 public sealed class LogTail : IDisposable
 {
-    string path = ""; long offset; DateTime created; string partial = ""; bool attached;
+    const int HeadSize = 256;
+    string path = ""; long offset; string partial = ""; bool attached;
+    // First bytes of the attached file. Star Citizen starts every Game.log with a timestamped header, so a different
+    // head means a new session file even when Windows file-system tunnelling keeps the old creation time.
+    byte[] head = [];
+    // True until the file has been observed missing: only the log already present at startup is skipped;
+    // a Game.log created later (new game session) is read from its first line.
+    bool skipExistingHistory = true;
     readonly System.Text.Decoder decoder=System.Text.Encoding.UTF8.GetDecoder();
     FileSystemWatcher? watcher; volatile bool dirty = true;
     public void SetPath(string value)
     {
         if(path == value) return;
-        watcher?.Dispose(); watcher = null; path=value; offset=0; partial=""; created=default; dirty=true; attached=false; decoder.Reset();
-        if(Directory.Exists(Path.GetDirectoryName(path)))
+        watcher?.Dispose(); watcher = null; path=value; offset=0; partial=""; head=[]; dirty=true; attached=false; skipExistingHistory=true; decoder.Reset();
+        string? directory=Path.GetDirectoryName(path);
+        if(!string.IsNullOrEmpty(directory) && Directory.Exists(directory))
         {
-            watcher=new(Path.GetDirectoryName(path)!, Path.GetFileName(path)) { NotifyFilter=NotifyFilters.LastWrite|NotifyFilters.Size|NotifyFilters.FileName|NotifyFilters.CreationTime };
-            watcher.Changed+=(_,_)=>dirty=true; watcher.Created+=(_,_)=>dirty=true; watcher.Deleted+=(_,_)=>dirty=true; watcher.Renamed+=(_,_)=>dirty=true; watcher.Error+=(_,_)=>dirty=true; watcher.EnableRaisingEvents=true;
+            try
+            {
+                watcher=new(directory, Path.GetFileName(path)) { NotifyFilter=NotifyFilters.LastWrite|NotifyFilters.Size|NotifyFilters.FileName|NotifyFilters.CreationTime };
+                watcher.Changed+=(_,_)=>dirty=true; watcher.Created+=(_,_)=>dirty=true; watcher.Deleted+=(_,_)=>dirty=true; watcher.Renamed+=(_,_)=>dirty=true; watcher.Error+=(_,_)=>dirty=true; watcher.EnableRaisingEvents=true;
+            }
+            catch(Exception e) when(e is ArgumentException or IOException or PlatformNotSupportedException) { watcher?.Dispose(); watcher=null; }
         }
+    }
+    void Reset() { offset=0; partial=""; head=[]; decoder.Reset(); }
+    static byte[] ReadHead(FileStream stream)
+    {
+        stream.Seek(0,SeekOrigin.Begin);
+        byte[] buffer=new byte[(int)Math.Min(HeadSize,stream.Length)]; int read=0;
+        while(read<buffer.Length){int n=stream.Read(buffer,read,buffer.Length-read);if(n==0)break;read+=n;}
+        return read==buffer.Length?buffer:buffer[..read];
     }
     public IEnumerable<string> Read(bool reconcile = false)
     {
         if(!dirty && !reconcile) return []; dirty=false;
-        if(!File.Exists(path)) { offset=0; partial=""; attached=false; decoder.Reset(); return []; }
-        var info=new FileInfo(path);
+        if(string.IsNullOrEmpty(path) || !File.Exists(path)) { Reset(); attached=false; if(!string.IsNullOrEmpty(path)) skipExistingHistory=false; return []; }
         using var stream=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete);
-        if(attached && (created != info.CreationTimeUtc || stream.Length<offset)) { offset=0; partial=""; decoder.Reset(); }
-        created=info.CreationTimeUtc;
-        if(!attached) { offset=stream.Length; attached=true; return []; }
+        if(!attached)
+        {
+            attached=true;
+            if(skipExistingHistory) { skipExistingHistory=false; head=ReadHead(stream); offset=stream.Length; return []; }
+            Reset();
+        }
+        else
+        {
+            byte[] current=ReadHead(stream);
+            int common=Math.Min(current.Length,head.Length);
+            bool replaced=stream.Length<offset || !current.AsSpan(0,common).SequenceEqual(head.AsSpan(0,common));
+            if(replaced) Reset();
+        }
+        if(head.Length<HeadSize && stream.Length>head.Length) head=ReadHead(stream);
+        if(stream.Length<=offset) return [];
         stream.Seek(offset,SeekOrigin.Begin);
         byte[] bytes=new byte[(int)Math.Min(262144,stream.Length-offset)]; int read=stream.Read(bytes); offset+=read;
         char[] chars=new char[System.Text.Encoding.UTF8.GetMaxCharCount(read)];int charCount=decoder.GetChars(bytes,0,read,chars,0,false);
