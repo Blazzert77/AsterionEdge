@@ -3,16 +3,17 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
 (async()=>{
  const cfg=JSON.parse(fs.readFileSync(process.env.ASTERION_TEST_CONFIG,'utf8').replace(/^\uFEFF/,'')),base='http://127.0.0.1:'+cfg.port;
  const state=await(await fetch(base+'/state')).json();assert.equal(state.simulation,true,'Dedicated simulation required');
- const browser=await chromium.launch({headless:true});
+ const browser=await chromium.launch({headless:true,...(process.env.ASTERION_BROWSER_PATH?{executablePath:process.env.ASTERION_BROWSER_PATH}:{})});
  try{
   const page=await browser.newPage({viewport:{width:2560,height:720}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
   // Render a realistic unbound-door state without permitting any real command.
   const fixture=structuredClone(state);fixture.context='FLIGHT';fixture.contextSource='MANUAL';fixture.simulation=false;fixture.running=true;fixture.appearance.theme='nebula';fixture.appearance.accent='#00C8FA';fixture.appearance.panel='#063044';fixture.appearance.fontScale=100;fixture.appearance.radius=2;
-  fixture.actions.filter(a=>['doors','doorsOpen','doorsClose'].includes(a.id)).forEach(a=>{a.bound=false;a.input='';});
+  fixture.actions.filter(a=>['doors','doorsOpen','doorsClose','doorlocks','eject','coolers'].includes(a.id)).forEach(a=>{a.bound=false;a.input='';});
   let commands=0;
   await page.routeWebSocket('**/events',ws=>{ws.send(JSON.stringify({type:'state',state:fixture}));ws.onMessage(message=>{const m=JSON.parse(message);if(m.type==='action')commands++;if(m.type==='ping')ws.send(JSON.stringify({type:'pong'}));});});
   await page.goto(base);await page.getByText('CONNECTÉ',{exact:true}).waitFor();
   for(const id of ['weaponsUp','weaponsDown','enginesUp','enginesDown','shieldsUp','shieldsDown','master','destruct'])assert(await page.locator('[data-action='+id+']').isEnabled(),id+' should resolve');
+  for(const id of ['doors','doorlocks','eject','coolers']){const hint=page.locator('[data-action='+id+'] > small');assert.equal(await hint.textContent(),'À CONFIGURER');assert(await hint.isVisible(),id+' binding hint must remain visible');}
   await page.getByRole('button',{name:'POINTS',exact:true}).click();assert.equal(await page.locator('.allocation-grid').count(),3);assert.equal(await page.locator('.shield-action').count(),0);
   await page.getByRole('button',{name:'POWER',exact:true}).click();
   if(process.env.ASTERION_SCREENSHOT)await page.screenshot({path:process.env.ASTERION_SCREENSHOT});

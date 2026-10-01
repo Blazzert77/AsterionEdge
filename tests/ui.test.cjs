@@ -3,7 +3,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
 (async()=>{
  const cfg=JSON.parse(fs.readFileSync(process.env.ASTERION_TEST_CONFIG,'utf8').replace(/^\uFEFF/,''));const base='http://127.0.0.1:'+cfg.port;
  assert.equal((await(await fetch(base+'/state')).json()).simulation,true,'Dedicated simulation required');
- const browser=await chromium.launch({headless:true});
+ const browser=await chromium.launch({headless:true,...(process.env.ASTERION_BROWSER_PATH?{executablePath:process.env.ASTERION_BROWSER_PATH}:{})});
  try{
   const page=await browser.newPage({viewport:{width:2560,height:720}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base);await page.getByText('CONNECTÉ',{exact:true}).waitFor();

@@ -8,12 +8,12 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
  ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.type==='ack'&&pending.has(m.requestId)){pending.get(m.requestId)(m);pending.delete(m.requestId);}};
  await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
  async function send(type,id=''){const requestId=crypto.randomUUID();const m=await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('Ack timeout')),5000);pending.set(requestId,m=>{clearTimeout(timeout);resolve(m);});ws.send(JSON.stringify({type,id,requestId}));});return m;}
- const browser=await chromium.launch({headless:true});
+ const browser=await chromium.launch({headless:true,...(process.env.ASTERION_BROWSER_PATH?{executablePath:process.env.ASTERION_BROWSER_PATH}:{})});
  try{
   const page=await browser.newPage({viewport:{width:2560,height:720}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await send('context','FLIGHT');await send('theme','nebula');await send('fontScale','100');await send('density','comfortable');await send('animations','1');
   await page.goto(base);await page.getByText('CONNECTÉ',{exact:true}).waitFor();
-  assert.equal(await page.locator('#versionBadge').textContent(),'v0.3.2');
+  assert.equal(await page.locator('#versionBadge').textContent(),'v0.3.3');
   assert.match(await page.locator('#clock').textContent(),/^\d\d:\d\d$/);
   // A feed event really changes the render key while the guarded pointer is held.
   const eject=page.locator('[data-action=eject]');await eject.evaluate(el=>{window.testHeldButton=el;});

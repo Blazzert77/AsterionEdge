@@ -8,6 +8,9 @@ public record LogEvent(string Kind, string Message, Context? Context = null, str
 public record LogRule(string Pattern, string LocalActor, Context Context, string? Ship = null);
 public static class GameLog
 {
+    // Only actual local HUD additions, not fade/replay lines or other players' vehicle activity.
+    static readonly Regex ShipChannel = new(@"<SHUDEvent_OnNotification> Added notification ""Vous avez (rejoint|quitté)\s+canal '(?<ship>(?:Origin|RSI|Drake|Anvil|Aegis|Crusader|MISC|MIRAI|Argo|Gatac|Esperia|Banu|Consolidated Outland)\s+[^':\r\n]{1,80}?)\s*:\s*[^'\r\n]{1,64}'",RegexOptions.CultureInvariant,TimeSpan.FromMilliseconds(40));
+    static readonly Regex DriverExit = new(@"<Vehicle Control Flow> CVehicleMovementBase::ClearDriver: Local client node \[\d+\] releasing control token for '[^']+' \[\d+\]",RegexOptions.CultureInvariant,TimeSpan.FromMilliseconds(40));
     static readonly Regex JoinPu = new(@"<Join PU>.*?\bshard\[([^\]]+)\](?:.*?\blocationId\[([^\]]*)\])?", RegexOptions.CultureInvariant|RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(40));
     static readonly Regex ShardUpdate = new(@"New Shard Id:\s*([^\s.]+)", RegexOptions.CultureInvariant|RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(40));
     static readonly Regex ContractAccepted = new("\"Contract Accepted:\\s*(.*?)\"\\s*MissionId", RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(40));
@@ -19,6 +22,13 @@ public static class GameLog
     {
         if (line.Length > 16_384) return null;
         if (line.Contains("<SystemQuit>")) return new("session", "Arrêt de session détecté", Asterion.Core.Context.UNKNOWN);
+        var channel=ShipChannel.Match(line);
+        if(channel.Success)
+        {
+            bool entered=channel.Groups[1].Value=="rejoint";
+            return new(entered?"ship_channel_enter":"ship_channel_leave",entered?"Canal du vaisseau rejoint · présence à bord présumée":"Canal du vaisseau quitté",entered?Asterion.Core.Context.FLIGHT:Asterion.Core.Context.ON_FOOT,Ship:channel.Groups["ship"].Value.Trim());
+        }
+        if(DriverExit.IsMatch(line))return new("seat_exit","Contrôle du véhicule quitté",Asterion.Core.Context.ON_FOOT);
 
         var join=JoinPu.Match(line);
         if(join.Success)
@@ -72,13 +82,14 @@ public static class GameLog
 }
 public sealed class ContextMachine
 {
+    string detectedSource="UNAVAILABLE";
     public Context Detected { get; private set; } = Context.UNKNOWN;
     public Context? Manual { get; private set; }
     public Context Current => Manual ?? Detected;
-    public string Source => Manual.HasValue ? "MANUAL" : Detected == Context.UNKNOWN ? "UNAVAILABLE" : "LOG RULE";
-    public void Apply(LogEvent e) { if (e.Context.HasValue) Detected = e.Context.Value; }
+    public string Source => Manual.HasValue ? "MANUAL" : Detected == Context.UNKNOWN ? "UNAVAILABLE" : detectedSource;
+    public void Apply(LogEvent e) { if (e.Context.HasValue) { Detected = e.Context.Value;detectedSource=e.Kind.StartsWith("ship_channel_")?"SHIP CHANNEL":"LOG RULE"; } }
     public void Force(Context? context) => Manual = context;
-    public void Reset() { Detected = Context.UNKNOWN; Manual = null; }
+    public void Reset() { Detected = Context.UNKNOWN; Manual = null;detectedSource="UNAVAILABLE"; }
 }
 
 public sealed class HoldGate(Func<long>? clock = null)
@@ -160,4 +171,3 @@ public sealed class LogTail : IDisposable
     }
     public void Dispose()=>watcher?.Dispose();
 }
-

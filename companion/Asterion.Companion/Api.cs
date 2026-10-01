@@ -94,6 +94,8 @@ public sealed class Api(Engine engine)
                             last=Environment.TickCount64;
                             if(engine.Actions.Any(a=>a.Id==id&&a.Dangerous)&&!hold.Commit(client,id,engine.Config.HoldDuration))throw new InvalidOperationException("Hold interrupted or too short");
                             await engine.Execute(id);break;
+                        case "indicator": engine.SetIndicator(id);break;
+                        case "resetIndicators": engine.ResetIndicators();break;
                         case "binding": engine.SetBinding(id);break;
                         case "context": engine.Context(id);break;
                         case "accent": engine.SetAccent(id);break;

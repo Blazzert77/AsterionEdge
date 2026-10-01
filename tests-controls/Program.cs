@@ -67,4 +67,25 @@ Test("Stable null-config and SemVer protections remain intact",()=>{
  Check(UpdateChecker.IsNewer("0.3.2","0.3.1"));Check(UpdateChecker.IsNewer("0.3.0","0.3.0-design.2"));Check(!UpdateChecker.IsNewer("0.3.0-design.2","0.3.0"));
 });
 Test("Catalog durations are internally consistent",()=>{foreach(var a in engine.Actions)Check(a.MinimumPressMs>=30&&a.MinimumPressMs<=a.PressMs&&a.PressMs<=a.MaximumPressMs&&a.MaximumPressMs<=1500,a.Id);});
+Test("Game mouse-device profile and port default resolve independently",()=>{
+ Profile("<ActionMaps><actionmap name='spaceship_general'><action name='v_toggle_all_doors'><rebind input='mo1_mouse5'/></action><action name='v_toggle_all_doorlocks'><rebind input='mo1_mouse4'/></action></actionmap></ActionMaps>");
+ Check(Resolve("doors").Input=="mo1_mouse5");Check(Resolve("doorlocks").Input=="mo1_mouse4");Check(Resolve("portlocks").Input=="kb1_ralt+k");
+});
+JsonElement Snapshot()=>JsonSerializer.SerializeToElement(engine.Snapshot(),Config.Json);
+Test("Session context restores boarding history without replaying rewards",()=>{
+ string dir=Path.GetDirectoryName(engine.LogPath)!;Directory.CreateDirectory(dir);
+ File.WriteAllText(engine.LogPath,"[CSessionManager::OnClientSpawned] Spawned!\n<SHUDEvent_OnNotification> Added notification \"Vous avez rejoint canal 'RSI Perseus : Tester'.\n<SHUDEvent_OnNotification> Awarded 100 aUEC\n");
+ engine.Context("AUTO");engine.RestoreContextFromLog();var snap=Snapshot();Check(snap.GetProperty("context").GetString()=="FLIGHT");Check(snap.GetProperty("contextSource").GetString()=="SHIP CHANNEL");Check(engine.SessionEarnings==null);
+ engine.ApplyContextEvent(new("seat_exit","",Context.ON_FOOT));Check(Snapshot().GetProperty("context").GetString()=="FLIGHT");
+ engine.ApplyContextEvent(new("ship_channel_leave","",Context.ON_FOOT,Ship:"Origin M80"));Check(Snapshot().GetProperty("context").GetString()=="FLIGHT");
+ engine.ApplyContextEvent(new("ship_channel_leave","",Context.ON_FOOT,Ship:"RSI Perseus"));Check(Snapshot().GetProperty("context").GetString()=="ON_FOOT"&&engine.Ship==null);
+});
+Test("Feedback belongs to Companion, survives snapshots, and failed commands cannot light it",()=>{
+ engine.SetIndicator("{\"id\":\"doors\",\"value\":false}");
+ try{engine.Execute("doors").GetAwaiter().GetResult();throw new Exception("Non-simulation input should be rejected without game running");}catch(InvalidOperationException){}
+ var door=Snapshot().GetProperty("actions").EnumerateArray().Single(a=>a.GetProperty("id").GetString()=="doors");Check(!door.GetProperty("indicator").GetProperty("active").GetBoolean());
+ engine.Simulate("BOARD_SHIP");engine.SetIndicator("{\"id\":\"doors\",\"value\":false}");engine.Execute("doors").GetAwaiter().GetResult();engine.Execute("ping").GetAwaiter().GetResult();
+ door=Snapshot().GetProperty("actions").EnumerateArray().Single(a=>a.GetProperty("id").GetString()=="doors");Check(door.GetProperty("indicator").GetProperty("active").GetBoolean());Check(!door.GetProperty("stateKnown").GetBoolean());
+ engine.Simulate("STOP");door=Snapshot().GetProperty("actions").EnumerateArray().Single(a=>a.GetProperty("id").GetString()=="doors");Check(door.GetProperty("indicator").GetProperty("active").ValueKind==JsonValueKind.Null);
+});
 Console.WriteLine($"{passed} passed, {failed} failed");return failed==0?0:1;

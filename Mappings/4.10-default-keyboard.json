@@ -260,6 +260,13 @@
       "action": "v_engineering_assignment_shields_max",
       "input": "kb1_f7",
       "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "portlocks",
+      "map": "spaceship_general",
+      "action": "v_toggle_all_portlocks",
+      "input": "kb1_ralt+k",
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644"
     }
   ]
 }

@@ -47,12 +47,14 @@ public record KeyChord(ushort[] ScanCodes, int MouseButton = 0)
     public static bool TryParse(string input, out KeyChord chord)
     {
         chord = new([]);
-        if (!input.StartsWith("kb1_", StringComparison.OrdinalIgnoreCase)) return false;
+        bool mouseDevice=input.StartsWith("mo1_",StringComparison.OrdinalIgnoreCase);
+        if (!mouseDevice && !input.StartsWith("kb1_", StringComparison.OrdinalIgnoreCase)) return false;
         var parts = input[4..].Split('+', StringSplitOptions.TrimEntries);
         if (parts.Length is < 1 or > 4) return false;
         var codes = new List<ushort>(); int mouse = 0;
         foreach (string part in parts)
         {
+            if(mouseDevice&&!part.Equals("mouse4",StringComparison.OrdinalIgnoreCase)&&!part.Equals("mouse5",StringComparison.OrdinalIgnoreCase))return false;
             if (part.Equals("mouse4", StringComparison.OrdinalIgnoreCase) || part.Equals("mouse5", StringComparison.OrdinalIgnoreCase)) { if (parts.Length != 1) return false; mouse = part.Equals("mouse4", StringComparison.OrdinalIgnoreCase) ? 1 : 2; }
             else if (Keys.TryGetValue(part, out var code)) codes.Add(code);
             else return false;

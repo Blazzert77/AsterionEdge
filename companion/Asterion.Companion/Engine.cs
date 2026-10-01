@@ -11,8 +11,9 @@ public sealed class Engine : IDisposable
     public readonly object Gate=new();
     public readonly List<ActionSpec> Actions;
     readonly Dictionary<string,DefaultBindingSpec> defaultBindings;
-    public const string CurrentVersion = "0.3.2";
+    public const string CurrentVersion = "0.3.3";
     readonly ContextMachine machine=new();
+    readonly CommandFeedback feedback=new();
     readonly LogTail tail=new();
     readonly SemaphoreSlim actionLock=new(1,1);
     List<Binding> bindings=[];
@@ -96,13 +97,13 @@ public sealed class Engine : IDisposable
 
         var matches=bindings.Where(b=>string.Equals(b.Map,action.Map,StringComparison.OrdinalIgnoreCase)
                                       && string.Equals(b.Action,action.Action,StringComparison.OrdinalIgnoreCase)).ToArray();
-        var keyboard=matches.Where(b=>b.Status=="BOUND" && b.Input.StartsWith("kb1_",StringComparison.OrdinalIgnoreCase))
+        var keyboard=matches.Where(b=>b.Status=="BOUND" && (b.Input.StartsWith("kb1_",StringComparison.OrdinalIgnoreCase)||b.Input.StartsWith("mo1_",StringComparison.OrdinalIgnoreCase)))
                             .Select(b=>b.Input).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
         if(keyboard.Length==1)return(keyboard[0],action.PressMs,"PROFIL JOUEUR");
         if(keyboard.Length>1)return("",0,"BINDING CLAVIER AMBIGU");
         // The player's profile overrides the keyboard slot (cleared with "kb1_ " or set to a multi-tap/hold variant):
         // sending the 4.10 default key here would trigger whatever the player bound to that key instead.
-        var keyboardSlot=matches.Where(b=>string.IsNullOrWhiteSpace(b.Input)||b.Input.TrimStart().StartsWith("kb1_",StringComparison.OrdinalIgnoreCase)).ToArray();
+        var keyboardSlot=matches.Where(b=>string.IsNullOrWhiteSpace(b.Input)||(b.Input.TrimStart().StartsWith("kb1_",StringComparison.OrdinalIgnoreCase)||b.Input.TrimStart().StartsWith("mo1_",StringComparison.OrdinalIgnoreCase))).ToArray();
         if(keyboardSlot.Length>0)
             return("",0,keyboardSlot.Any(b=>b.Status=="UNSUPPORTED ACTIVATION")?"ACTIVATION NON SUPPORTÉE":keyboardSlot.All(b=>b.Status=="UNBOUND")?"DÉLIÉ DANS LE PROFIL":"TOUCHE NON SUPPORTÉE");
 
@@ -123,8 +124,10 @@ public sealed class Engine : IDisposable
             appearance=new { theme=Config.Theme,accent=Accent(),accent2=Config.Accent2,background=Config.Background,panel=Config.Panel,panelOpacity=Config.PanelOpacity,fontScale=Config.FontScale,radius=Config.Radius,glow=Config.Glow,quickColumns=Config.QuickColumns,density=Config.Density,animations=Config.Animations,manufacturerColors=Config.ManufacturerColors },
             economy=new { balance=AuecBalance,sessionEarnings=SessionEarnings,sessionCashflow=SessionCashflow,mission=ActiveMission,source=(SessionEarnings.HasValue||SessionCashflow.HasValue)?"GAME.LOG":"UNAVAILABLE",note="Flux observé uniquement — pas un solde ni une comptabilité complète" },
             update=new { checkedRemote=Update.Checked,available=Update.Available,current=Update.CurrentVersion,latest=Update.LatestVersion,url=Update.Url,error=Update.Error },
+            contextHint="Le canal du vaisseau indique une présence à bord présumée, pas la prise du siège pilote. Les états des équipements ne sont pas fournis par Game.log.",
+            indicators=CommandFeedback.Definitions.Select(d=>new {d.Id,d.On,d.Off,state=feedback.Get(d.Id)}).ToArray(),
             bindingCount=bindings.Count, defaultBindingCount=defaultBindings.Count, bindingError=BindingError,feed=feed.ToArray(),
-            actions=Actions.Select(a=>{ var b=Resolve(a);return new {a.Id,a.Label,a.Page,a.Dangerous,a.Evidence,a.MinimumPressMs,a.MaximumPressMs,bound=b.Input!="",input=b.Input,source=b.Source,pressMs=b.Press,stateKnown=false};}).ToArray()
+            actions=Actions.Select(a=>{ var b=Resolve(a);return new {a.Id,a.Label,a.Page,a.Dangerous,a.Evidence,a.MinimumPressMs,a.MaximumPressMs,bound=b.Input!="",input=b.Input,source=b.Source,pressMs=b.Press,stateKnown=false,indicator=CommandFeedback.Definitions.Any(d=>d.Id==a.Id)?feedback.Get(a.Id):null};}).ToArray()
         };
     }
     string Accent()
@@ -148,7 +151,7 @@ public sealed class Engine : IDisposable
                     throw new ArgumentException("Unknown context");
                 forced=parsed;
             }
-            machine.Force(forced);
+            var before=machine.Current;machine.Force(forced);if(before!=machine.Current)feedback.Reset();
             Add("Context: "+machine.Current,"MANUAL");
         }
         Changed?.Invoke();
@@ -157,6 +160,7 @@ public sealed class Engine : IDisposable
     {
         lock(Gate)
         {
+            feedback.Reset();
             if(scenario=="STOP") { Simulation=false; machine.Reset();Ship=null;Location=null;Shard=null; Add("Simulation ended","SYSTEM"); }
             else
             {
@@ -177,14 +181,52 @@ public sealed class Engine : IDisposable
         {
             ActionSpec spec; (string Input,int Press,string Source) b; bool sim;
             lock(Gate) { spec=Actions.SingleOrDefault(a=>a.Id==id)??throw new ArgumentException("Unknown action"); b=Resolve(spec);sim=Simulation; }
-            if(sim) { lock(Gate)Add("Test command: "+spec.Label,"SIMULATION · NO INPUT");Changed?.Invoke();return; }
+            if(sim) { lock(Gate){feedback.Sent(id);Add("Test command: "+spec.Label,"SIMULATION · NO INPUT");}Changed?.Invoke();return; }
             if(!KeyChord.TryParse(b.Input,out var chord))throw new InvalidOperationException("Binding absent or unsupported");
             if(!Running)throw new InvalidOperationException("Star Citizen is stopped");
             await WindowsInput.Send(chord,b.Press,Config.RestoreFocusFromIcue);
-            lock(Gate)Add("Command sent: "+spec.Label,"INPUT · STATE UNKNOWN");
+            lock(Gate){feedback.Sent(id);Add("Command sent: "+spec.Label,"INPUT · STATE UNKNOWN");}
             Log.Write("Command sent: "+spec.Id);Changed?.Invoke();
         }
         finally { actionLock.Release(); }
+    }
+    public void SetIndicator(string json)
+    {
+        using var doc=JsonDocument.Parse(json);var root=doc.RootElement;
+        string id=root.GetProperty("id").GetString()??"";var value=root.GetProperty("value");
+        bool? active=value.ValueKind==JsonValueKind.Null?null:value.GetBoolean();
+        lock(Gate)feedback.Calibrate(id,active);Changed?.Invoke();
+    }
+    public void ResetIndicators(){lock(Gate)feedback.Reset();Changed?.Invoke();}
+    public void ApplyContextEvent(LogEvent e)
+    {
+        if(!e.Context.HasValue)return;
+        lock(Gate)
+        {
+            // Remaining aboard after leaving the pilot seat still calls for the ship dashboard.
+            if(e.Kind=="seat_exit"&&Ship!=null)return;
+            if(e.Kind=="ship_channel_leave"&&Ship!=null&&!string.Equals(Ship,e.Ship,StringComparison.OrdinalIgnoreCase))return;
+            string? ship=e.Context==Asterion.Core.Context.ON_FOOT||e.Context==Asterion.Core.Context.UNKNOWN?null:e.Ship??Ship;
+            if(machine.Detected!=e.Context.Value||ship!=Ship||e.Kind=="session")feedback.Reset();
+            machine.Apply(e);Ship=ship;
+        }
+    }
+    public void RestoreContextFromLog()
+    {
+        // Restore context only, never replay rewards, actions or old equipment estimates.
+        try
+        {
+            using var stream=new FileStream(LogPath,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete);
+            bool truncated=stream.Length>4_000_000;
+            if(truncated)stream.Seek(-4_000_000,SeekOrigin.End);
+            using var reader=new StreamReader(stream);if(truncated)reader.ReadLine();
+            while(reader.ReadLine() is { } line)
+            {
+                var e=GameLog.Parse(line,Config.LogRules);
+                if(e?.Context!=null)ApplyContextEvent(e);
+            }
+        }
+        catch(Exception e) when(e is IOException or UnauthorizedAccessException){Log.Write("Context history unavailable: "+e.GetType().Name);}
     }
     static string RequireColor(string? value,string field)
     {
@@ -281,19 +323,18 @@ public sealed class Engine : IDisposable
                             {
                                 string root=Directory.GetParent(branch)!.FullName;
                                 if(Config.StarCitizenPath!=root||Config.Branch!=Path.GetFileName(branch))
-                                {Config.StarCitizenPath=root;Config.Branch=Path.GetFileName(branch);Config.BindingProfile="";Config.Save();machine.Reset();Ship=null;Location=null;Shard=null;Rescan();}
+                                {Config.StarCitizenPath=root;Config.Branch=Path.GetFileName(branch);Config.BindingProfile="";Config.Save();machine.Reset();feedback.Reset();Ship=null;Location=null;Shard=null;Rescan();if(!Simulation)RestoreContextFromLog();}
                             }
                         }
                     }catch(System.ComponentModel.Win32Exception) { }catch(InvalidOperationException) { }
                     finally { foreach(var p in processes)p.Dispose(); }
-                    if(running!=Running) { Running=running;if(!Simulation){machine.Reset();Ship=null;Location=null;Shard=null;ActiveMission=null;SessionEarnings=running?0:null;SessionCashflow=running?0:null;}Add(running?"Star Citizen démarré":"Star Citizen arrêté","PROCESS"); }
+                    if(running!=Running) { Running=running;feedback.Reset();if(!Simulation){machine.Reset();Ship=null;Location=null;Shard=null;ActiveMission=null;SessionEarnings=running?0:null;SessionCashflow=running?0:null;}Add(running?"Star Citizen démarré":"Star Citizen arrêté","PROCESS");if(running&&!Simulation)RestoreContextFromLog(); }
                     tail.SetPath(LogPath);
                     foreach(var line in tail.Read(++tick%10==0))
                     {
                         if(Simulation||!Running)continue;
                         var e=GameLog.Parse(line,Config.LogRules); if(e==null)continue;
-                        machine.Apply(e);
-                        if(e.Context.HasValue && e.Ship!=null)Ship=e.Ship;
+                        ApplyContextEvent(e);
                         if(!string.IsNullOrWhiteSpace(e.Location))Location=e.Location;
                         if(!string.IsNullOrWhiteSpace(e.Shard))Shard=e.Shard;
                         if(!string.IsNullOrWhiteSpace(e.Mission))ActiveMission=e.Mission;

@@ -1213,6 +1213,26 @@
       "minimumPressMs": 400,
       "maximumPressMs": 1500,
       "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "doorlocks",
+      "label": "Verrouiller / déverrouiller les portes",
+      "page": "Systems",
+      "map": "spaceship_general",
+      "action": "v_toggle_all_doorlocks",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644"
+    },
+    {
+      "id": "portlocks",
+      "label": "Verrouiller / déverrouiller les ports",
+      "page": "Systems",
+      "map": "spaceship_general",
+      "action": "v_toggle_all_portlocks",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644"
     }
   ]
 }

@@ -37,5 +37,27 @@ Test("Tail: Game.log recreated with a new session header is read from the start"
  try{File.WriteAllText(p,"<2026-09-01> Log started A\nold line\n");using var tail=new LogTail();tail.SetPath(p);Assert(!tail.Read(true).Any());File.Delete(p);Assert(!tail.Read(true).Any());File.WriteAllText(p,"<2026-09-02> Log started B\nfirst\n");var lines=tail.Read(true).ToArray();Assert(lines.Length==2&&lines[1]=="first","got "+string.Join("|",lines));
  File.WriteAllText(p,"<2026-09-03> Log started C, a longer header than before\nnext\n");lines=tail.Read(true).ToArray();Assert(lines.Length==2&&lines[1]=="next","rotation: "+string.Join("|",lines));}finally{Directory.Delete(dir,true);}});
 if(args.Length>0)Test("Catalog: unique IDs, required pages, guarded risky actions",()=>{using var j=JsonDocument.Parse(File.ReadAllText(args[0]));var actions=j.RootElement.GetProperty("actions").EnumerateArray().ToArray();Assert(actions.Select(a=>a.GetProperty("id").GetString()).Distinct().Count()==actions.Length);foreach(string id in new[]{"power","eject","destruct"})Assert(actions.Single(a=>a.GetProperty("id").GetString()==id).GetProperty("dangerous").GetBoolean());foreach(string page in new[]{"Flight","Combat","FPS","Power","Targeting"})Assert(actions.Any(a=>a.GetProperty("page").GetString()==page));});
+Test("Mouse-device exports: supported side buttons, no invented other inputs",()=>{
+ Assert(KeyChord.TryParse("mo1_mouse4",out var a)&&a.MouseButton==1);Assert(KeyChord.TryParse("MO1_MOUSE5",out a)&&a.MouseButton==2);
+ Assert(!KeyChord.TryParse("mo1_mouse1",out _));Assert(!KeyChord.TryParse("mo1_f4",out _));
+});
+Test("Local ship-channel joins/leaves identify boarding, not arbitrary chat channels",()=>{
+ const string prefix="<SHUDEvent_OnNotification> Added notification \"";
+ var e=GameLog.Parse(prefix+"Vous avez rejoint canal 'Origin M80 : Tester'.");Assert(e?.Context==Context.FLIGHT&&e.Ship=="Origin M80");
+ Assert(GameLog.Parse(prefix+"Vous avez quitté  canal 'Origin M80 : Tester'.")?.Context==Context.ON_FOOT);
+ Assert(GameLog.Parse(prefix+"Vous avez rejoint canal 'Global : Tester'.")==null);
+ Assert(GameLog.Parse("<UpdateNotificationItem> Notification \"Vous avez rejoint canal 'Origin M80 : Tester'.")==null);
+ Assert(GameLog.Parse("NPC entered RSI Perseus")==null);
+ var m=new ContextMachine();m.Apply(e!);Assert(m.Source=="SHIP CHANNEL");m.Force(Context.ON_FOOT);Assert(m.Current==Context.ON_FOOT&&m.Source=="MANUAL");
+});
+Test("Indicators: unknown stays unknown; calibrated state persists across unrelated commands",()=>{
+ var f=new CommandFeedback();f.Sent("doors");Assert(f.Get("doors").Active==null&&f.Get("doors").Touched);
+ f.Calibrate("doors",false);f.Sent("doors");f.Sent("lights");f.Sent("ping");f.Sent("startup");Assert(f.Get("doors").Active==true&&f.Get("doors").Source=="ESTIMATED");
+ f.Sent("doors");Assert(f.Get("doors").Active==false);f.Sent("doorlock");Assert(f.Get("doorlocks").Active==true);f.Reset();Assert(f.Get("doorlocks").Active==null);
+});
+Test("Indicators: every supported toggle is independent and momentary actions do not latch",()=>{
+ var f=new CommandFeedback();foreach(var d in CommandFeedback.Definitions){f.Calibrate(d.Id,false);f.Sent(d.Id);Assert(f.Get(d.Id).Active==true,d.Id);}
+ f.Sent("eject");Assert(f.Get("eject").Active==null);f.Sent("doorsClose");Assert(f.Get("doors").Active==false);
+});
 Console.WriteLine($"{passed} passed, {failed.Count} failed");return failed.Count==0?0:1;
 

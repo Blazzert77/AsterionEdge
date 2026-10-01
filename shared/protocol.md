@@ -44,3 +44,12 @@ En mode auto-link ces routes ne demandent pas de bearer token, mais restent inac
 
 La suppression du pairing manuel est un choix UX. Un processus local malveillant pourrait contacter le service loopback ; Asterion ne prétend pas protéger contre un programme déjà exécuté sur le PC de l’utilisateur. Les garde-fous importants restent : catalogue d’actions fermé, maintien côté serveur pour les actions dangereuses, Star Citizen requis au premier plan pour l’envoi réel, aucun shell/lecture mémoire/injection.
 
+
+## Indicateurs de commande (v0.3.3)
+
+`state.indicators` contient les définitions `{id,on,off,state}`. Les actions concernées exposent aussi `indicator:{active,source,touched}` : `active` vaut true, false ou null ; `source` vaut USER, ESTIMATED ou UNAVAILABLE. Ces données ne constituent pas une télémétrie et `stateKnown` reste false.
+
+- `indicator`, id = chaîne JSON `{ "id":"doors", "value":false }` : synchronisation manuelle (value accepte aussi null).
+- `resetIndicators` : remettre tous les états à inconnu.
+
+Les états appartiennent au Companion, pas à une connexion. Ils survivent aux reconnexions et changements de page, mais sont invalidés lors des changements de contexte/session. `contextSource:"SHIP CHANNEL"` désigne une présence à bord présumée à partir du canal du vaisseau, sans confirmation du siège pilote.
