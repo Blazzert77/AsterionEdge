@@ -20,9 +20,15 @@ public static class Bindings
             bool complex = bind.Attributes().Any(a => a.Name.LocalName != "input" && a.Value != "0")
                 || action.Attributes().Any(a=>a.Name.LocalName!="name" && a.Value!="0");
             result.Add(new((string?)map.Attribute("name") ?? "", (string?)action.Attribute("name") ?? "", input,
-                complex ? "UNSUPPORTED ACTIVATION" : KeyChord.TryParse(input, out _) ? "BOUND" : input == "" ? "UNBOUND" : "UNSUPPORTED INPUT"));
+                IsExplicitUnbind(input) ? "UNBOUND" : complex ? "UNSUPPORTED ACTIVATION" : KeyChord.TryParse(input, out _) ? "BOUND" : "UNSUPPORTED INPUT"));
         }
         return result;
+    }
+    // Star Citizen writes a cleared binding as the bare device prefix, e.g. input="kb1_ " or input="js1_ ".
+    public static bool IsExplicitUnbind(string input)
+    {
+        string trimmed = input.Trim();
+        return trimmed == "" || System.Text.RegularExpressions.Regex.IsMatch(trimmed, @"^[a-z]{2}\d+_$", System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
     }
 }
 
@@ -41,19 +47,20 @@ public record KeyChord(ushort[] ScanCodes, int MouseButton = 0)
     public static bool TryParse(string input, out KeyChord chord)
     {
         chord = new([]);
-        if (!input.StartsWith("kb1_", StringComparison.OrdinalIgnoreCase)) return false;
+        bool mouseDevice=input.StartsWith("mo1_",StringComparison.OrdinalIgnoreCase);
+        if (!mouseDevice && !input.StartsWith("kb1_", StringComparison.OrdinalIgnoreCase)) return false;
         var parts = input[4..].Split('+', StringSplitOptions.TrimEntries);
         if (parts.Length is < 1 or > 4) return false;
         var codes = new List<ushort>(); int mouse = 0;
         foreach (string part in parts)
         {
-            if (part is "mouse4" or "mouse5") { if (parts.Length != 1) return false; mouse = part == "mouse4" ? 1 : 2; }
+            if(mouseDevice&&!part.Equals("mouse4",StringComparison.OrdinalIgnoreCase)&&!part.Equals("mouse5",StringComparison.OrdinalIgnoreCase))return false;
+            if (part.Equals("mouse4", StringComparison.OrdinalIgnoreCase) || part.Equals("mouse5", StringComparison.OrdinalIgnoreCase)) { if (parts.Length != 1) return false; mouse = part.Equals("mouse4", StringComparison.OrdinalIgnoreCase) ? 1 : 2; }
             else if (Keys.TryGetValue(part, out var code)) codes.Add(code);
             else return false;
         }
         if (codes.Distinct().Count() != codes.Count) return false;
-        // Modifier-first ordering matters for chords written as f6+lalt by the game.
-        codes = codes.OrderBy(c => c is 29 or 42 or 54 or 56 or 0x11d or 0x138 ? 0 : 1).ToList();
-        chord = new(codes.ToArray(), mouse); return true;
+        // SC exports chords such as f6+lalt; modifiers must be pressed before the action key.
+        chord = new(codes.OrderBy(c=>c is 29 or 42 or 54 or 56 or 0x11d or 0x138 ? 0 : 1).ToArray(), mouse); return true;
     }
 }

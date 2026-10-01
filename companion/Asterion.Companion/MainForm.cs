@@ -48,7 +48,7 @@ public sealed class MainForm : Form
         var auto=new CheckBox(){Text="Changement automatique de page selon le contexte disponible",AutoSize=true,Checked=e.Config.AutoContext};auto.CheckedChanged+=(_,_)=>{e.Config.AutoContext=auto.Checked;e.Config.Save();};body.Controls.Add(auto);
         var colors=new CheckBox(){Text="Accent selon le constructeur (si connu)",AutoSize=true,Checked=e.Config.ManufacturerColors};colors.CheckedChanged+=(_,_)=>e.SetManufacturerColors(colors.Checked);body.Controls.Add(colors);
         AddButtons(body,("Couleur personnalisée",()=>{using var d=new ColorDialog();if(d.ShowDialog()==DialogResult.OK){e.SetAccent(ColorTranslator.ToHtml(d.Color));}}));
-        AddButtons(body,("Thème Cyan",()=>e.SetTheme("nebula")),("Thème Graphite",()=>e.SetTheme("graphite")),("Thème Ambre",()=>e.SetTheme("amber")));
+        AddButtons(body,("Thème Obsidienne",()=>e.SetTheme("minimal")),("Thème Graphite",()=>e.SetTheme("graphite")),("Thème Nuit bleue",()=>e.SetTheme("nebula")));
         body.Controls.Add(new Label(){Text="SIMULATEUR · aucune commande clavier n’est envoyée",AutoSize=true,ForeColor=Color.FromArgb(242,192,110)});
         AddButtons(body,("À pied",()=>e.Simulate("ON_FOOT")),("Embarquer",()=>e.Simulate("BOARD_SHIP")),("Combat",()=>e.Simulate("COMBAT")),("Débarquer",()=>e.Simulate("EXIT_SHIP")),("Fin simulation",()=>e.Simulate("STOP")));
         body.Controls.Add(message);
@@ -102,10 +102,13 @@ public sealed class MainForm : Form
         using var form=new Form(){Text="Commandes · saisie explicite ou XML détecté",Size=new(1000,650)};
         var grid=new DataGridView(){Dock=DockStyle.Fill,AllowUserToAddRows=false,AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill,BackgroundColor=Color.White};
         grid.Columns.Add("id","Action");grid.Columns[0].ReadOnly=true;grid.Columns.Add("xml","Binding XML / effectif");grid.Columns[1].ReadOnly=true;grid.Columns.Add("manual","Override (ex. kb1_lalt+n)");grid.Columns.Add("duration","Durée ms (30–1500)");
-        foreach(var a in engine.Actions){engine.Config.Overrides.TryGetValue(a.Id,out var b);grid.Rows.Add(a.Id+" · "+a.Label,engine.Resolve(a).Input,b?.Input??"",b?.PressMs??90);}
+        foreach(DataGridViewColumn column in grid.Columns)column.SortMode=DataGridViewColumnSortMode.NotSortable;
+        foreach(var a in engine.Actions){engine.Config.Overrides.TryGetValue(a.Id,out var b);string effective;lock(engine.Gate)effective=engine.Resolve(a).Input;int row=grid.Rows.Add(a.Id+" · "+a.Label,effective,b?.Input??"",b?.PressMs??90);grid.Rows[row].Tag=a;}
         var help=new TextBox(){Dock=DockStyle.Top,Height=88,Multiline=true,ReadOnly=true,Text="Asterion recherche automatiquement un export layout_asterion_exported.xml puis le profil actionmaps.xml. Les noms de touches sont des positions physiques QWERTY (scancodes). Vérifiez AZERTY en jeu.\r\nExport optionnel : console du jeu → pp_rebindkeys export all asterion.\r\nUne case vide conserve le binding XML. Les actions complexes/double-tap doivent être reconfigurées en jeu."};
         var save=new Button(){Text="Enregistrer les overrides locaux",Dock=DockStyle.Bottom,Height=42};save.Click+=(_,_)=>{
-            try{var edits=new Dictionary<string,ManualBinding>();for(int i=0;i<grid.Rows.Count;i++){var r=grid.Rows[i];string input=r.Cells[2].Value?.ToString()?.Trim()??"";if(input=="")continue;if(!KeyChord.TryParse(input,out _)||!int.TryParse(r.Cells[3].Value?.ToString(),out int duration)||duration<30||duration>1500)throw new InvalidOperationException("Binding ou durée invalide : "+engine.Actions[i].Label);edits[engine.Actions[i].Id]=new(input,duration);}lock(engine.Gate){engine.Config.Overrides=edits;engine.Config.Save();}form.Close();}catch(Exception ex){MessageBox.Show(ex.Message);}};
+            grid.EndEdit();
+            try{var edits=new Dictionary<string,ManualBinding>();foreach(DataGridViewRow r in grid.Rows){if(r.Tag is not ActionSpec action)continue;string input=r.Cells[2].Value?.ToString()?.Trim()??"";if(input=="")continue;if(!KeyChord.TryParse(input,out _)||!int.TryParse(r.Cells[3].Value?.ToString(),out int duration)||duration<30||duration>1500)throw new InvalidOperationException("Binding ou durée invalide : "+action.Label);edits[action.Id]=new(input,duration);}lock(engine.Gate){engine.Config.Overrides=edits;engine.Config.Save();}form.Close();}catch(Exception ex){MessageBox.Show(ex.Message);}};
         form.Controls.Add(grid);form.Controls.Add(help);form.Controls.Add(save);form.ShowDialog();engine.Rescan();
     }
 }
+

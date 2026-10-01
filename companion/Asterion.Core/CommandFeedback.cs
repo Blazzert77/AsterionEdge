@@ -1,32 +1,40 @@
 namespace Asterion.Core;
 
-// These are dashboard estimates, never game telemetry. A toggle needs a user-supplied baseline.
+public record IndicatorDefinition(string Id,string On,string Off);
+public record Indicator(bool? Active,string Source,bool Touched);
+
+// Command estimates are not telemetry. An unknown toggle needs an observed baseline.
 public sealed class CommandFeedback
 {
-    public static readonly string[] Toggles = ["lights","doors","engines","weapons","shields","coolers","power","gear","vtol","decoupled","cruise","gsafe","esp","limiter","proximity","headtrack","lightamp"];
-    readonly Dictionary<string,bool> estimates = [];
-    readonly HashSet<string> touched = [];
-    readonly Dictionary<string,int> deltas = [];
-    public bool? Estimate(string id) => estimates.TryGetValue(id,out var value)?value:null;
-    public bool Touched(string id) => touched.Contains(id);
-    public int Delta(string id) => deltas.GetValueOrDefault(id);
-    public void Calibrate(string id,bool? value)
+    public static readonly IndicatorDefinition[] Definitions = [
+        new("doors","OUVERTES","FERMÉES"),new("doorlocks","VERROUILLÉES","DÉVERROUILLÉES"),new("portlocks","VERROUILLÉS","DÉVERROUILLÉS"),
+        new("lights","ALLUMÉS","ÉTEINTS"),new("power","SOUS TENSION","HORS TENSION"),new("engines","MARCHE","ARRÊT"),new("weapons","ACTIVES","COUPÉES"),new("shields","ACTIFS","COUPÉS"),new("coolers","ACTIFS","COUPÉS"),
+        new("master","NAV","SCM"),new("gear","SORTI","RENTRÉ"),new("vtol","ACTIF","INACTIF"),new("decoupled","DÉCOUPLÉ","COUPLÉ"),new("cruise","ACTIF","INACTIF"),new("gsafe","ACTIF","INACTIF"),new("esp","ACTIF","INACTIF"),new("limiter","ACTIF","INACTIF"),new("proximity","ACTIF","INACTIF"),new("headtrack","ACTIF","INACTIF"),new("lightamp","ACTIF","INACTIF"),new("flashlight","ALLUMÉE","ÉTEINTE"),new("helmet","ÉQUIPÉ","RETIRÉ")
+    ];
+    readonly Dictionary<string,Indicator> values=[];
+    public Indicator Get(string id)=>values.GetValueOrDefault(id)??new(null,"UNAVAILABLE",false);
+    public void Calibrate(string id,bool? active)
     {
-        if(!Toggles.Contains(id))throw new ArgumentException("Indicateur inconnu");
-        if(value.HasValue)estimates[id]=value.Value;else estimates.Remove(id);
-        touched.Remove(id);
+        if(!Definitions.Any(x=>x.Id==id))throw new ArgumentException("Indicateur inconnu");
+        values[id]=new(active,active.HasValue?"USER":"UNAVAILABLE",false);
     }
     public void Sent(string id)
     {
-        if(Toggles.Contains(id)){if(estimates.TryGetValue(id,out var value))estimates[id]=!value;touched.Add(id);}
-        if(id is "doorsOpen" or "doorsClose"){estimates["doors"]=id=="doorsOpen";touched.Add("doors");}
-        foreach(string group in new[]{"weapons","engines","shields"})
+        if(id=="startup"){InvalidatePower();return;}
+        if(Definitions.Any(x=>x.Id==id))
         {
-            if(id==group+"Up")deltas[group]=Delta(group)+1;
-            if(id==group+"Down")deltas[group]=Delta(group)-1;
-            if(id==group+"Max"||id==group+"Min"||id=="balance")deltas.Remove(group);
+            var old=Get(id);bool? next=old.Active.HasValue?!old.Active.Value:null;
+            if(id=="power")InvalidatePower();
+            values[id]=new(next,next.HasValue?"ESTIMATED":"UNAVAILABLE",true);
         }
-        if(id=="startup"||id=="power")Reset();
+        var explicitState=id switch {
+            "doorsOpen"=>("doors",true),"doorsClose"=>("doors",false),
+            "doorlock"=>("doorlocks",true),"doorunlock"=>("doorlocks",false),
+            "portsLock"=>("portlocks",true),"portsUnlock"=>("portlocks",false),
+            _=>("",false)
+        };
+        if(explicitState.Item1!="")values[explicitState.Item1]=new(explicitState.Item2,"ESTIMATED",true);
     }
-    public void Reset(){estimates.Clear();touched.Clear();deltas.Clear();}
+    void InvalidatePower(){foreach(var id in new[]{"power","engines","weapons","shields","coolers"})values.Remove(id);}
+    public void Reset()=>values.Clear();
 }

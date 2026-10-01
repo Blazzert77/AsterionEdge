@@ -39,3 +39,4 @@ HTML/CSS/JS sans dépendance distante ; C# .NET 10 WinForms + Kestrel ; liaison 
 - Les achats/ventes de marchandises peuvent apparaître via `SendCommodityBuyRequest` / `SendCommoditySellRequest` avec un total. Asterion additionne seulement ces flux observés avec les récompenses `Awarded ... aUEC`. Le résultat est nommé « flux observé », jamais « bénéfice net » ni « solde ».
 - `USER/Client/0/Profiles/default/actionmaps.xml` ne contient pas nécessairement les touches qui sont restées aux valeurs par défaut. La V0.3 ajoute donc une petite table de fallback clavier 4.10, volontairement limitée à des commandes courantes documentées. Un binding réellement présent dans le profil utilisateur garde toujours la priorité.
 - Le fallback n'est pas une télémétrie de jeu : il décrit une touche à envoyer. Les états réels des boucliers, armes ou systèmes restent inconnus tant qu'une source fiable ne les expose pas.
+

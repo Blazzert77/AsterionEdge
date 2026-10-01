@@ -3,14 +3,13 @@ using System.Text.Json;
 using Asterion.Core;
 namespace Asterion.Companion;
 
-public record ActionSpec(string Id,string Label,string Page,string Map,string Action,bool Dangerous,int PressMs,string Evidence);
+public record ActionSpec(string Id,string Label,string Page,string Map,string Action,bool Dangerous,int PressMs,string Evidence,int MinimumPressMs=30,int MaximumPressMs=1500);
 public record Catalog(string Version,string Note,List<ActionSpec> Actions);
 public record ManualBinding(string Input,int PressMs = 90);
 public record DefaultBindingSpec(string Id,string Map,string Action,string Input,string Evidence);
 public record DefaultBindingCatalog(string Version,string Note,List<DefaultBindingSpec> Actions);
 public sealed class Config
 {
-    public int CommandSchema { get; set; }
     public string StarCitizenPath { get; set; } = "";
     public string Branch { get; set; } = "LIVE";
     public string BindingProfile { get; set; } = "";
@@ -42,6 +41,7 @@ public sealed class Config
     public bool RestoreFocusFromIcue { get; set; } = true;
     public bool DebugLogging { get; set; }
     public Dictionary<string,ManualBinding> Overrides { get; set; } = [];
+    public int CommandSchema { get; set; }
     public List<LogRule> LogRules { get; set; } = [];
     public static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web) { WriteIndented=true, Converters={ new System.Text.Json.Serialization.JsonStringEnumConverter() } };
     public static string DataDir { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"AsterionEdge");
@@ -49,9 +49,27 @@ public sealed class Config
     public static Config Load()
     {
         Directory.CreateDirectory(DataDir);
-        var c=File.Exists(FilePath)? JsonSerializer.Deserialize<Config>(File.ReadAllText(FilePath),Json) ?? new():new Config();
+        Config c;
+        try { c=File.Exists(FilePath)? JsonSerializer.Deserialize<Config>(File.ReadAllText(FilePath),Json) ?? new():new Config(); }
+        catch(JsonException)
+        {
+            // Keep the unreadable file for the user instead of refusing to start.
+            try { File.Copy(FilePath,FilePath+".corrupt",true); } catch(IOException) { }
+            c=new Config();
+        }
+        c.StarCitizenPath??=""; c.BindingProfile??=""; c.UpdateRepository??=""; c.UpdateFeedUrl??="";
+        c.Overrides??=[]; c.LogRules??=[];
+        c.LogRules.RemoveAll(r=>r==null||r.Pattern==null||r.LocalActor==null);
+        foreach(var key in c.Overrides.Where(o=>o.Value?.Input==null).Select(o=>o.Key).ToList()) c.Overrides.Remove(key);
+        // Before schema 2, "doors" meant unlocking, not opening. Preserve that shortcut under its actual function.
+        if(c.CommandSchema<2)
+        {
+            if(c.Overrides.Remove("doors",out var oldDoorBinding))c.Overrides.TryAdd("doorunlock",oldDoorBinding);
+            c.CommandSchema=2;
+        }
+        if(!new[]{"LIVE","PTU","EPTU"}.Contains(c.Branch,StringComparer.OrdinalIgnoreCase)) c.Branch="LIVE"; else c.Branch=c.Branch.ToUpperInvariant();
         c.Port=Math.Clamp(c.Port,1024,65535); c.HoldDuration=Math.Clamp(c.HoldDuration,1500,3000);
-        if(c.Token.Length<32) c.Token=Convert.ToHexString(RandomNumberGenerator.GetBytes(24));
+        if((c.Token?.Length??0)<32) c.Token=Convert.ToHexString(RandomNumberGenerator.GetBytes(24));
         static bool Color(string v)=>System.Text.RegularExpressions.Regex.IsMatch(v??"","^#[0-9a-fA-F]{6}$");
         if(!Color(c.Accent))c.Accent="#00C8FA";
         if(!Color(c.Accent2))c.Accent2="#2B8CFF";
@@ -62,10 +80,9 @@ public sealed class Config
         c.Radius=Math.Clamp(c.Radius,0,20);
         c.Glow=Math.Clamp(c.Glow,0,100);
         c.QuickColumns=Math.Clamp(c.QuickColumns,6,12);
-        if(!new[]{"compact","comfortable","large"}.Contains(c.Density,StringComparer.OrdinalIgnoreCase))c.Density="comfortable";
-        if(!new[]{"nebula","graphite","tactical","minimal","amber","solar","violet"}.Contains(c.Theme,StringComparer.OrdinalIgnoreCase))c.Theme="nebula";
+        if(!new[]{"compact","comfortable","large"}.Contains(c.Density,StringComparer.OrdinalIgnoreCase))c.Density="comfortable"; else c.Density=c.Density.ToLowerInvariant();
+        if(!new[]{"nebula","graphite","tactical","minimal","amber","solar","violet"}.Contains(c.Theme,StringComparer.OrdinalIgnoreCase))c.Theme="nebula"; else c.Theme=c.Theme.ToLowerInvariant();
         if(c.Language!="fr"&&c.Language!="en")c.Language="fr";
-        if(c.CommandSchema<2){if(c.Overrides.Remove("doors",out var oldDoors)&&!c.Overrides.ContainsKey("doorunlock"))c.Overrides["doorunlock"]=oldDoors;c.CommandSchema=2;}
         c.Save(); return c;
     }
     public void Save()

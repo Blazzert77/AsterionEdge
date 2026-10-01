@@ -2,7 +2,7 @@ name: Validate and build Asterion Edge
 
 on:
   push:
-    branches: [develop, main]
+    branches: [develop, main, release/v0.3.0, release/v0.3.4]
   workflow_dispatch:
 
 permissions:
@@ -38,18 +38,18 @@ jobs:
       - name: Package portable application
         shell: pwsh
         run: ./scripts/package-portable.ps1
-      - name: Upload development build
+      - name: Upload build
         uses: actions/upload-artifact@v4
         with:
-          name: AsterionEdge-${{ github.ref_name }}-${{ github.sha }}
+          name: AsterionEdge-${{ github.sha }}
           path: |
             release/AsterionEdge-Setup-*.exe
             release/AsterionEdge-portable-*.zip
             asterion-star-citizen-cockpit-*.icuewidget
           if-no-files-found: error
           retention-days: 30
-      - name: Publish GitHub prerelease
-        if: github.ref == 'refs/heads/main'
+      - name: Publish release
+        if: github.ref == 'refs/heads/release/v0.3.4'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
@@ -61,4 +61,5 @@ jobs:
             Write-Host "Release $tag already exists; preserving published assets."
             exit 0
           }
-          gh release create $tag release/AsterionEdge-Setup-*.exe release/AsterionEdge-portable-*.zip asterion-star-citizen-cockpit-*.icuewidget --target "${{ github.sha }}" --title "Asterion Edge $tag" --notes-file docs/release-design.2.md --prerelease
+          gh release create $tag release/AsterionEdge-Setup-*.exe release/AsterionEdge-portable-*.zip asterion-star-citizen-cockpit-*.icuewidget --target "${{ github.sha }}" --title "Asterion Edge $tag — Nouvelle interface cockpit" --notes-file docs/release-0.3.4.md
+          if ($LASTEXITCODE -ne 0) { throw 'Release publication failed' }

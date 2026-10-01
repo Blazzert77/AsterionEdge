@@ -18,3 +18,4 @@ Le correctif qui avait résolu l’erreur d’import « Élément title manquant
 Cette session tourne sous Linux et ne contient pas le SDK .NET Windows ni Inno Setup. Le companion WinForms et l’installateur Windows n’ont donc pas été compilés ici. `BUILD_AND_INSTALL.cmd` automatise cette compilation sur un PC Windows, puis lance l’installateur généré.
 
 Le test final à faire sur le PC cible reste : installation, présence de l’icône dans la zone de notification, import iCUE, passage automatique à `COMPANION CONNECTED`, puis détection de `StarCitizen.exe`.
+

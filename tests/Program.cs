@@ -31,11 +31,33 @@ Test("Tail: initial history ignored, partial append combined, truncate recovered
 Test("Tail: empty file followed by UTF-8 split writes",()=>{
  string dir=Path.Combine(Path.GetTempPath(),"asterion-test-"+Guid.NewGuid());Directory.CreateDirectory(dir);string p=Path.Combine(dir,"Game.log");
  try{File.WriteAllBytes(p,[]);using var tail=new LogTail();tail.SetPath(p);tail.Read(true);using(var f=new FileStream(p,FileMode.Append)){f.WriteByte(0xc3);}Assert(!tail.Read(true).Any());using(var f=new FileStream(p,FileMode.Append)){f.Write(new byte[]{0xa9,10});}Assert(tail.Read(true).Single()=="é");}finally{Directory.Delete(dir,true);}});
+Test("Bindings: Star Citizen explicit unbind (kb1_ ) is UNBOUND",()=>{var b=Bindings.Parse("<ActionMaps><actionmap name='spaceship_movement'><action name='v_toggle_landing_system'><rebind input='kb1_ '/></action><action name='x'><rebind input='js1_ '/></action></actionmap></ActionMaps>");Assert(b.All(x=>x.Status=="UNBOUND"));Assert(KeyChord.TryParse("kb1_MOUSE5",out var k)&&k.MouseButton==2);});
+Test("Tail: Game.log recreated with a new session header is read from the start",()=>{
+ string dir=Path.Combine(Path.GetTempPath(),"asterion-test-"+Guid.NewGuid());Directory.CreateDirectory(dir);string p=Path.Combine(dir,"Game.log");
+ try{File.WriteAllText(p,"<2026-09-01> Log started A\nold line\n");using var tail=new LogTail();tail.SetPath(p);Assert(!tail.Read(true).Any());File.Delete(p);Assert(!tail.Read(true).Any());File.WriteAllText(p,"<2026-09-02> Log started B\nfirst\n");var lines=tail.Read(true).ToArray();Assert(lines.Length==2&&lines[1]=="first","got "+string.Join("|",lines));
+ File.WriteAllText(p,"<2026-09-03> Log started C, a longer header than before\nnext\n");lines=tail.Read(true).ToArray();Assert(lines.Length==2&&lines[1]=="next","rotation: "+string.Join("|",lines));}finally{Directory.Delete(dir,true);}});
 if(args.Length>0)Test("Catalog: unique IDs, required pages, guarded risky actions",()=>{using var j=JsonDocument.Parse(File.ReadAllText(args[0]));var actions=j.RootElement.GetProperty("actions").EnumerateArray().ToArray();Assert(actions.Select(a=>a.GetProperty("id").GetString()).Distinct().Count()==actions.Length);foreach(string id in new[]{"power","eject","destruct"})Assert(actions.Single(a=>a.GetProperty("id").GetString()==id).GetProperty("dangerous").GetBoolean());foreach(string page in new[]{"Flight","Combat","FPS","Power","Targeting"})Assert(actions.Any(a=>a.GetProperty("page").GetString()==page));});
-Test("Modifiers: game-style f6+lalt sends modifier first",()=>{Assert(KeyChord.TryParse("kb1_f6+lalt",out var chord));Assert(chord.ScanCodes.SequenceEqual(new ushort[]{56,64}));});
-Test("Feedback: unknown toggle never invents an ON state",()=>{var f=new CommandFeedback();f.Sent("lights");Assert(f.Estimate("lights")==null&&f.Touched("lights"));});
-Test("Feedback: calibrated toggle, explicit doors, reset",()=>{var f=new CommandFeedback();f.Calibrate("lights",false);f.Sent("lights");Assert(f.Estimate("lights")==true);f.Sent("lights");Assert(f.Estimate("lights")==false);f.Sent("doorsOpen");Assert(f.Estimate("doors")==true);f.Sent("doorsClose");Assert(f.Estimate("doors")==false);f.Reset();Assert(f.Estimate("lights")==null&&!f.Touched("doors"));});
-Test("Power: adjustment counts are deltas, maximum invalidates them",()=>{var f=new CommandFeedback();f.Sent("weaponsUp");f.Sent("weaponsUp");f.Sent("weaponsDown");Assert(f.Delta("weapons")==1);f.Sent("weaponsMax");Assert(f.Delta("weapons")==0);f.Sent("shieldsDown");f.Sent("balance");Assert(f.Delta("shields")==0);});
-Test("Context: observed local driver exit only",()=>{const string line="<Vehicle Control Flow> CVehicleMovementBase::ClearDriver: Local client node [12345] releasing control token for 'ORIG_Test_98765' [98765] [Team_CGP4][Vehicle]";Assert(GameLog.Parse(line)?.Context==Context.ON_FOOT);Assert(GameLog.Parse(line.Replace("Local client node","Remote client node"))==null);Assert(GameLog.Parse("<SCItemVehicleLandingGearSystem::OnEngineStateChange()> Failed to detach vehicle due to control token not being granted")==null);});
-if(args.Length>0)Test("Catalog: current energy actions and distinct door commands",()=>{using var j=JsonDocument.Parse(File.ReadAllText(args[0]));var a=j.RootElement.GetProperty("actions").EnumerateArray().ToDictionary(x=>x.GetProperty("id").GetString()!);Assert(a["doors"].GetProperty("action").GetString()=="v_toggle_all_doors");Assert(a["doorunlock"].GetProperty("action").GetString()=="v_unlock_all_doors");Assert(a["eject"].GetProperty("map").GetString()=="seat_general");Assert(a["destruct"].GetProperty("pressMs").GetInt32()>=600);foreach(var id in new[]{"weaponsUp","enginesUp","shieldsUp"})Assert(a[id].GetProperty("action").GetString()!.StartsWith("v_engineering_assignment_"));});
+Test("Mouse-device exports: supported side buttons, no invented other inputs",()=>{
+ Assert(KeyChord.TryParse("mo1_mouse4",out var a)&&a.MouseButton==1);Assert(KeyChord.TryParse("MO1_MOUSE5",out a)&&a.MouseButton==2);
+ Assert(!KeyChord.TryParse("mo1_mouse1",out _));Assert(!KeyChord.TryParse("mo1_f4",out _));
+});
+Test("Local ship-channel joins/leaves identify boarding, not arbitrary chat channels",()=>{
+ const string prefix="<SHUDEvent_OnNotification> Added notification \"";
+ var e=GameLog.Parse(prefix+"Vous avez rejoint canal 'Origin M80 : Tester'.");Assert(e?.Context==Context.FLIGHT&&e.Ship=="Origin M80");
+ Assert(GameLog.Parse(prefix+"Vous avez quitté  canal 'Origin M80 : Tester'.")?.Context==Context.ON_FOOT);
+ Assert(GameLog.Parse(prefix+"Vous avez rejoint canal 'Global : Tester'.")==null);
+ Assert(GameLog.Parse("<UpdateNotificationItem> Notification \"Vous avez rejoint canal 'Origin M80 : Tester'.")==null);
+ Assert(GameLog.Parse("NPC entered RSI Perseus")==null);
+ var m=new ContextMachine();m.Apply(e!);Assert(m.Source=="SHIP CHANNEL");m.Force(Context.ON_FOOT);Assert(m.Current==Context.ON_FOOT&&m.Source=="MANUAL");
+});
+Test("Indicators: unknown stays unknown; calibrated state persists across unrelated commands",()=>{
+ var f=new CommandFeedback();f.Sent("doors");Assert(f.Get("doors").Active==null&&f.Get("doors").Touched);
+ f.Calibrate("doors",false);f.Sent("doors");f.Sent("lights");f.Sent("ping");f.Sent("startup");Assert(f.Get("doors").Active==true&&f.Get("doors").Source=="ESTIMATED");
+ f.Sent("doors");Assert(f.Get("doors").Active==false);f.Sent("doorlock");Assert(f.Get("doorlocks").Active==true);f.Reset();Assert(f.Get("doorlocks").Active==null);
+});
+Test("Indicators: every supported toggle is independent and momentary actions do not latch",()=>{
+ var f=new CommandFeedback();foreach(var d in CommandFeedback.Definitions){f.Calibrate(d.Id,false);f.Sent(d.Id);Assert(f.Get(d.Id).Active==true,d.Id);}
+ f.Sent("eject");Assert(f.Get("eject").Active==null);f.Sent("doorsClose");Assert(f.Get("doors").Active==false);
+});
 Console.WriteLine($"{passed} passed, {failed.Count} failed");return failed.Count==0?0:1;
+

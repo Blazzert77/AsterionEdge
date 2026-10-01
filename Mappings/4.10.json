@@ -1,26 +1,28 @@
 {
   "version": "4.10-local-candidates",
-  "note": "No default keys assumed. IDs require an exact match in the selected player XML. Empty IDs must be assigned manually after checking current in-game controls.",
+  "note": "Command mappings include verified installed LIVE 4.10.193.11644 controls. Entries still marked candidate/manual are not verified. Unassigned game actions have no invented fallback.",
   "actions": [
     {
       "id": "master",
-      "label": "Master mode",
+      "label": "SCM / NAV",
       "page": "Flight",
       "map": "spaceship_movement",
       "action": "v_master_mode_cycle_long",
       "dangerous": false,
       "pressMs": 400,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500
     },
     {
       "id": "brake",
       "label": "Space brake",
       "page": "Flight",
       "map": "spaceship_movement",
-      "action": "v_space_brake",
+      "action": "v_brake",
       "dangerous": false,
-      "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "pressMs": 650,
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "gear",
@@ -37,10 +39,10 @@
       "label": "VTOL",
       "page": "Flight",
       "map": "spaceship_movement",
-      "action": "v_vtol_toggle",
+      "action": "v_toggle_vtol",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "cruise",
@@ -57,20 +59,20 @@
       "label": "Decoupled",
       "page": "Flight",
       "map": "spaceship_movement",
-      "action": "v_ifcs_vector_decoupling_toggle",
+      "action": "v_decoupled_toggle",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "limiter",
       "label": "Speed limiter",
       "page": "Flight",
       "map": "spaceship_movement",
-      "action": "v_ifcs_speed_limiter_toggle",
+      "action": "v_toggle_speed_limiter",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "gsafe",
@@ -97,10 +99,10 @@
       "label": "Request landing",
       "page": "Flight",
       "map": "spaceship_movement",
-      "action": "v_atc_request",
+      "action": "v_request_landing",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "autoland",
@@ -116,51 +118,51 @@
       "id": "lights",
       "label": "Ship lights",
       "page": "Flight",
-      "map": "lights_controller",
+      "map": "spaceship_general",
       "action": "v_lights",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "lock",
       "label": "Target lock",
       "page": "Combat",
-      "map": "spaceship_targeting_advanced",
+      "map": "spaceship_targeting",
       "action": "v_target_under_reticle",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "hostile",
       "label": "Next hostile",
       "page": "Combat",
-      "map": "spaceship_targeting_advanced",
+      "map": "spaceship_targeting",
       "action": "v_target_cycle_hostile_fwd",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "attacker",
       "label": "Next attacker",
       "page": "Combat",
-      "map": "spaceship_targeting_advanced",
+      "map": "spaceship_targeting",
       "action": "v_target_cycle_attacker_fwd",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "missile",
       "label": "Missile mode",
       "page": "Combat",
-      "map": "seat_general",
+      "map": "spaceship_weapons",
       "action": "v_toggle_missile_mode",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "arm",
@@ -177,20 +179,20 @@
       "label": "Decoy",
       "page": "Combat",
       "map": "spaceship_defensive",
-      "action": "v_weapon_countermeasure_decoy_launch",
+      "action": "v_countermeasure_decoy_launch",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "noise",
       "label": "Noise",
       "page": "Combat",
       "map": "spaceship_defensive",
-      "action": "v_weapon_countermeasure_noise_launch",
+      "action": "v_countermeasure_noise_launch",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "group",
@@ -210,7 +212,9 @@
       "action": "v_power_toggle_thrusters",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "shields",
@@ -220,7 +224,9 @@
       "action": "v_power_toggle_shields",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "weapons",
@@ -230,7 +236,9 @@
       "action": "v_power_toggle_weapons",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "coolers",
@@ -250,37 +258,45 @@
       "action": "v_power_toggle",
       "dangerous": true,
       "pressMs": 90,
-      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "pw",
-      "label": "Power → weapons",
+      "label": "Allocation armes au maximum",
       "page": "Power",
       "map": "spaceship_power",
       "action": "v_engineering_assignment_weapons_max",
       "dangerous": false,
       "pressMs": 400,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500
     },
     {
       "id": "pt",
-      "label": "Power → thrusters",
+      "label": "Allocation moteurs au maximum",
       "page": "Power",
       "map": "spaceship_power",
       "action": "v_engineering_assignment_engine_max",
       "dangerous": false,
       "pressMs": 400,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500
     },
     {
       "id": "ps",
-      "label": "Power → shields",
+      "label": "Allocation boucliers au maximum",
       "page": "Power",
       "map": "spaceship_power",
       "action": "v_engineering_assignment_shields_max",
       "dangerous": false,
       "pressMs": 400,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500
     },
     {
       "id": "balance",
@@ -290,47 +306,49 @@
       "action": "v_engineering_assignment_reset",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "friendly",
       "label": "Next friendly",
       "page": "Targeting",
-      "map": "spaceship_targeting_advanced",
+      "map": "spaceship_targeting",
       "action": "v_target_cycle_friendly_fwd",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "subtarget",
       "label": "Subcomponent",
       "page": "Targeting",
-      "map": "spaceship_targeting_advanced",
+      "map": "spaceship_targeting",
       "action": "v_target_cycle_subitem_fwd",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "pin",
       "label": "Pin target",
       "page": "Targeting",
       "map": "spaceship_targeting",
-      "action": "v_target_toggle_pin_index_1",
+      "action": "v_target_pin_index_1",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "scan",
       "label": "Scan mode",
       "page": "Targeting",
-      "map": "seat_general",
-      "action": "v_toggle_scan_mode",
+      "map": "spaceship_scanning",
+      "action": "v_scanning_mode",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "ping",
@@ -347,30 +365,30 @@
       "label": "Helmet",
       "page": "FPS",
       "map": "player",
-      "action": "toggleEquipHelmet",
+      "action": "toggle_helmet",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "flashlight",
       "label": "Flashlight",
       "page": "FPS",
       "map": "player",
-      "action": "toggle_flashlight",
+      "action": "flashlight",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "wipe",
       "label": "Wipe visor",
       "page": "FPS",
       "map": "player",
-      "action": "visor_wipe",
+      "action": "wipe_visor",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "mobiglas",
@@ -407,30 +425,30 @@
       "label": "Primary weapon",
       "page": "FPS",
       "map": "player",
-      "action": "select_primary_pit",
+      "action": "selectPrimaryWeapon",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "secondary",
       "label": "Secondary weapon",
       "page": "FPS",
       "map": "player",
-      "action": "select_secondary_pit",
+      "action": "selectSecondaryWeapon",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "sidearm",
       "label": "Sidearm",
       "page": "FPS",
       "map": "player",
-      "action": "select_sidearm_pit",
+      "action": "selectSidearm",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "reload",
@@ -447,10 +465,10 @@
       "label": "Fire mode",
       "page": "FPS",
       "map": "player",
-      "action": "weapon_change_firemode",
+      "action": "firemode",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "heal",
@@ -467,10 +485,10 @@
       "label": "Starmap",
       "page": "Systems",
       "map": "player",
-      "action": "v_starmap",
+      "action": "mobiglasMap",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "doors",
@@ -480,17 +498,19 @@
       "action": "v_toggle_all_doors",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "camera",
       "label": "External camera",
       "page": "Systems",
       "map": "spaceship_view",
-      "action": "v_view_cycle_fwd",
+      "action": "view_cycle",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Candidate only; requires profile evidence or explicit manual binding"
     },
     {
       "id": "headtrack",
@@ -520,7 +540,9 @@
       "action": "v_eject",
       "dangerous": true,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "destruct",
@@ -530,7 +552,9 @@
       "action": "v_self_destruct",
       "dangerous": true,
       "pressMs": 650,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 650,
+      "maximumPressMs": 1500
     },
     {
       "id": "sf",
@@ -640,7 +664,9 @@
       "action": "v_flightready",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "weaponsUp",
@@ -650,7 +676,9 @@
       "action": "v_engineering_assignment_weapons_increase",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "weaponsDown",
@@ -660,7 +688,9 @@
       "action": "v_engineering_assignment_weapons_decrease",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "enginesUp",
@@ -670,7 +700,9 @@
       "action": "v_engineering_assignment_engine_increase",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "enginesDown",
@@ -680,7 +712,9 @@
       "action": "v_engineering_assignment_engine_decrease",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "shieldsUp",
@@ -690,7 +724,9 @@
       "action": "v_engineering_assignment_shields_increase",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "shieldsDown",
@@ -700,37 +736,43 @@
       "action": "v_engineering_assignment_shields_decrease",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 150
     },
     {
       "id": "coolersUp",
-      "label": "Refroidissement +",
+      "label": "Débit de refroidissement +",
       "page": "Power",
       "map": "spaceship_general",
       "action": "v_cooler_throttle_up",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "coolersDown",
-      "label": "Refroidissement −",
+      "label": "Débit de refroidissement −",
       "page": "Power",
       "map": "spaceship_general",
       "action": "v_cooler_throttle_down",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29",
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500
     },
     {
       "id": "proximity",
       "label": "Assistance de proximité",
       "page": "Flight",
-      "map": "spaceship_movement",
-      "action": "v_ifcs_proximity_assist_toggle",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "mfdprev",
@@ -746,11 +788,11 @@
       "id": "lightamp",
       "label": "Vision nocturne",
       "page": "Systems",
-      "map": "seat_general",
-      "action": "v_light_amplification_toggle",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "freecam",
@@ -766,91 +808,91 @@
       "id": "cycleall",
       "label": "Cycle toutes les cibles",
       "page": "Targeting",
-      "map": "spaceship_targeting_advanced",
-      "action": "v_target_cycle_all_fwd",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "subreset",
       "label": "Réinitialiser sous-cible",
       "page": "Targeting",
-      "map": "spaceship_targeting_advanced",
-      "action": "v_target_cycle_subitem_reset",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "pin2",
       "label": "Épingler cible 2",
       "page": "Targeting",
-      "map": "spaceship_targeting",
-      "action": "v_target_toggle_pin_index_2",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "helmetstow",
       "label": "Ranger le casque",
       "page": "FPS",
-      "map": "player",
-      "action": "toggleAttachHelmet",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "melee",
       "label": "Mêlée",
       "page": "FPS",
-      "map": "player",
-      "action": "select_meleeweapon_pit",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "reload2",
       "label": "Rechargement alternatif",
       "page": "FPS",
-      "map": "player",
-      "action": "reloadSecondary",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "lower",
       "label": "Baisser l’arme",
       "page": "FPS",
-      "map": "player",
-      "action": "toggle_lowered",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "zeroUp",
       "label": "Distance de visée +",
       "page": "FPS",
-      "map": "player",
-      "action": "weapon_zeroing_increase",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "zeroDown",
       "label": "Distance de visée −",
       "page": "FPS",
-      "map": "player",
-      "action": "weapon_zeroing_decrease",
+      "map": "",
+      "action": "",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
       "id": "greet",
@@ -1053,104 +1095,144 @@
       "evidence": "Manual binding required; configure the shortcut assigned in your game settings"
     },
     {
-      "id": "weaponsMax",
-      "label": "weaponsMax",
-      "page": "Power",
-      "map": "spaceship_power",
-      "action": "v_engineering_assignment_weapons_max",
-      "dangerous": false,
-      "pressMs": 400,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
-    },
-    {
-      "id": "weaponsMin",
-      "label": "weaponsMin",
-      "page": "Power",
-      "map": "spaceship_power",
-      "action": "v_engineering_assignment_weapons_min",
-      "dangerous": false,
-      "pressMs": 400,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
-    },
-    {
-      "id": "enginesMax",
-      "label": "enginesMax",
-      "page": "Power",
-      "map": "spaceship_power",
-      "action": "v_engineering_assignment_engine_max",
-      "dangerous": false,
-      "pressMs": 400,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
-    },
-    {
-      "id": "enginesMin",
-      "label": "enginesMin",
-      "page": "Power",
-      "map": "spaceship_power",
-      "action": "v_engineering_assignment_engine_min",
-      "dangerous": false,
-      "pressMs": 400,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
-    },
-    {
-      "id": "shieldsMax",
-      "label": "shieldsMax",
-      "page": "Power",
-      "map": "spaceship_power",
-      "action": "v_engineering_assignment_shields_max",
-      "dangerous": false,
-      "pressMs": 400,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
-    },
-    {
-      "id": "shieldsMin",
-      "label": "shieldsMin",
-      "page": "Power",
-      "map": "spaceship_power",
-      "action": "v_engineering_assignment_shields_min",
-      "dangerous": false,
-      "pressMs": 400,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
-    },
-    {
       "id": "doorsOpen",
       "label": "Ouvrir les portes",
       "page": "Systems",
+      "dangerous": false,
       "map": "spaceship_general",
       "action": "v_open_all_doors",
-      "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
     },
     {
       "id": "doorsClose",
       "label": "Fermer les portes",
       "page": "Systems",
+      "dangerous": false,
       "map": "spaceship_general",
       "action": "v_close_all_doors",
-      "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
     },
     {
       "id": "doorunlock",
       "label": "Déverrouiller les portes",
       "page": "Systems",
+      "dangerous": false,
       "map": "spaceship_general",
       "action": "v_unlock_all_doors",
-      "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
     },
     {
       "id": "doorlock",
       "label": "Verrouiller les portes",
       "page": "Systems",
+      "dangerous": false,
       "map": "spaceship_general",
       "action": "v_lock_all_doors",
+      "pressMs": 90,
+      "minimumPressMs": 30,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "weaponsMax",
+      "label": "Armes au maximum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_max",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "weaponsMin",
+      "label": "Armes au minimum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_weapons_min",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "enginesMax",
+      "label": "Moteurs au maximum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_max",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "enginesMin",
+      "label": "Moteurs au minimum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_engine_min",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "shieldsMax",
+      "label": "Boucliers au maximum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_max",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "shieldsMin",
+      "label": "Boucliers au minimum",
+      "page": "Power",
+      "dangerous": false,
+      "map": "spaceship_power",
+      "action": "v_engineering_assignment_shields_min",
+      "pressMs": 400,
+      "minimumPressMs": 400,
+      "maximumPressMs": 1500,
+      "evidence": "Installed LIVE defaultProfile.xml, build 4.10.193.11644, verified 2026-09-29"
+    },
+    {
+      "id": "doorlocks",
+      "label": "Verrouiller / déverrouiller les portes",
+      "page": "Systems",
+      "map": "spaceship_general",
+      "action": "v_toggle_all_doorlocks",
       "dangerous": false,
       "pressMs": 90,
-      "evidence": "Verified in installed LIVE defaultProfile.xml, build 4.10.193.11644, 2026-09-22"
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644"
+    },
+    {
+      "id": "portlocks",
+      "label": "Verrouiller / déverrouiller les ports",
+      "page": "Systems",
+      "map": "spaceship_general",
+      "action": "v_toggle_all_portlocks",
+      "dangerous": false,
+      "pressMs": 90,
+      "evidence": "Installed LIVE defaultProfile.xml 4.10.193.11644"
     }
   ]
 }

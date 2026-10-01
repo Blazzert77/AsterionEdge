@@ -33,3 +33,4 @@ Le navigateur de développement peut être ouvert depuis **Ouvrir cockpit**. Dep
 Principaux champs : `starCitizenPath`, `branch`, `bindingProfile`, `port`, `accent`, `manufacturerColors`, `autoContext`, `holdDuration`, `startWithWindows`, `restoreFocusFromIcue`, `debugLogging`, `overrides`, `logRules`.
 
 `token` et `requirePairing` restent présents pour compatibilité/usage avancé mais le widget V0.2 ne demande pas de clé. Ne changez pas le port sans modifier également le widget ou reconstruire celui-ci.
+

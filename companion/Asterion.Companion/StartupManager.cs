@@ -21,3 +21,4 @@ public static class StartupManager
         else key.DeleteValue(ValueName,false);
     }
 }
+

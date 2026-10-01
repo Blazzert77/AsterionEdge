@@ -1,8 +1,8 @@
-# Installation et utilisation — Asterion Edge v0.3.0-dev.3
+# Installation et utilisation — Asterion Edge v0.3.0
 
 ## Installation
 
-1. Lancer `AsterionEdge-Setup-v0.3.0-dev.3.exe`.
+1. Lancer `AsterionEdge-Setup-v0.3.0.exe`.
 2. Le Companion est installé dans `%LOCALAPPDATA%\Programs\AsterionEdge`.
 3. Asterion démarre avec Windows et reste dans la zone de notification.
 4. Importer le fichier `.icuewidget` dans iCUE puis l'ajouter au XENEON EDGE.
@@ -30,3 +30,4 @@ Le widget utilise `ws://127.0.0.1:32147/events`. Le Companion n'écoute que sur 
 - **NON LIÉ** : exporter les bindings ou définir un override manuel.
 - **Contexte inconnu** : utiliser temporairement À pied / Vol.
 - **Windows refused input** : vérifier que Star Citizen et Asterion utilisent un niveau de privilèges compatible.
+
