@@ -1,3 +1,7 @@
+# 0.3.4 — Nouvelle interface cockpit
+
+Interface fournie intégrée sans retouche. Companion et commandes de v0.3.3 conservés. Voir [les notes](docs/release-0.3.4.md).
+
 # 0.3.3 — Voyants et contexte
 
 Commandes souris 4/5, verrous des portes et des ports, voyants indépendants synchronisables, mention À configurer et détection de présence à bord par canal. Voir [les notes](docs/release-0.3.3.md).
@@ -42,4 +46,5 @@ Reprise du cockpit de v0.3.0-design.1 sur le moteur v0.3.0 stable. Correctifs r�
 - Version affichée : `v0.3.0`.
 - Personnalisation avancée conservée.
 - Aucun faux état de bouclier/puissance n'est affiché : Asterion envoie des commandes, il ne prétend pas connaître leur état sans télémétrie fiable.
+
 
